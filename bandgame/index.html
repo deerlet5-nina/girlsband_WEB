@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乐队搭配游戏 - Girls Band Animation</title>
+    <link rel="stylesheet" href="../css/bandgame.css">
+</head>
+<body>
+    <header>
+        <h1>乐队搭配游戏</h1>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="../index.html">首页</a></li>
+            <li><a href="../k-on/index.html">轻音少女</a></li>
+            <li><a href="../bocchi/index.html">孤独摇滚</a></li>
+            <li><a href="../mygo/index.html">MYGO!!</a></li>
+            <li><a href="../gbc/index.html">无刺有刺</a></li>
+            <li><a href="index.html" class="active">乐队搭配游戏</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <div class="game-container">
+            <!-- 左侧区域 - 游戏介绍和评估 -->
+            <div class="left-panel">
+                <!-- 上部分 - 游戏介绍 -->
+                <div class="intro-section">
+                    <div class="game-rules">
+                        <h3>游戏规则</h3>
+                        <div class="rule-item">您需要在预算内选择成员组建一支乐队。</div>
+                        <div class="rule-item">每位成员有不同的角色、技能和化学反应值。</div>
+                        <div class="rule-item">乐队必须至少包含:主唱、吉他手、贝斯手和鼓手。</div>
+                        <div class="rule-item">乐队成员不限制人数，只要在预算范围内即可。</div>
+                        <div class="rule-item">组建合适的乐队以获得最高分。</div>
+                        <div class="rule-item">特殊组合将获得额外加分!</div>
+                    </div>
+                    
+                    <div class="budget-display">
+                        <div class="budget-text">
+                            可用预算: <span class="budget-amount" id="budget-display">15</span> 元
+                        </div>
+                        <button class="borrow-button" id="borrow-button" title="试试找人借钱？">💰 借钱</button>
+                        <button class="sound-toggle" id="sound-toggle" title="音效开关">🔊</button>
+                    </div>
+                    
+                    <div class="selected-members-container">
+                        <h3>已选择成员</h3>
+                        <div id="selected-members">
+                            <!-- 已选择的成员会显示在这里 -->
+                            <div class="empty-message">还没有选择任何成员</div>
+                        </div>
+                        
+                        <div id="requirements-check">
+                            <div class="requirements-missing">缺少必要的乐队角色</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 下部分 - 乐队评估 -->
+                <div class="evaluation-section">
+                    <h2>乐队评分</h2>
+                    
+                    <div class="score-grid">
+                        <div class="score-item">
+                            <h3>技能总分</h3>
+                            <div class="score-value" id="skill-score">0</div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <h3>化学反应</h3>
+                            <div class="score-value" id="chemistry-score">0</div>
+                        </div>
+                        
+                        <div class="score-item">
+                            <h3>特殊组合</h3>
+                            <div id="special-combos">
+                                <!-- 特殊组合会显示在这里 -->
+                                <div class="empty-message">还没有触发任何特殊组合</div>
+                            </div>
+                        </div>
+                        
+                        <div class="total-score-container">
+                            <h3>最终得分</h3>
+                            <div class="total-score-value" id="total-score">0</div>
+                            <div id="evaluationResult">
+                                <div class="evaluation-message">点击评估按钮查看乐队评价</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-controls">
+                        <button class="reset-button" id="reset-button">重新开始</button>
+                        <button class="evaluate-button" id="evaluate-button" disabled>评估乐队</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧区域 - 可选成员 -->
+            <div class="right-panel">
+                <h2>可选成员</h2>
+                <div class="members-scroll-area">
+                    <!-- 轻音少女 -->
+                    <div class="band-section">
+                        <h3>轻音少女</h3>
+                        <div class="band-members" id="k-on-members">
+                            <!-- 动态生成成员卡片 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 孤独摇滚 -->
+                    <div class="band-section">
+                        <h3>孤独摇滚</h3>
+                        <div class="band-members" id="bocchi-members">
+                            <!-- 动态生成成员卡片 -->
+                        </div>
+                    </div>
+                    
+                    <!-- MYGO!! -->
+                    <div class="band-section">
+                        <h3>MYGO!!</h3>
+                        <div class="band-members" id="mygo-members">
+                            <!-- 动态生成成员卡片 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 无刺有刺 -->
+                    <div class="band-section">
+                        <h3>无刺有刺</h3>
+                        <div class="band-members" id="gbc-members">
+                            <!-- 动态生成成员卡片 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 详细评估扩展区域 -->
+            <div class="evaluation-expansion-area" id="evaluation-expansion-area">
+                <!-- 详细评估结果会显示在这里 -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="../js/bandgame.js"></script>
+</body>
+</html> 

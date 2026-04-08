@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轻音少女 - Girls Band Animation</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/band-page.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=6i1XdBK0gNwtvxy1E3e8QfHjn7gRURgT"></script>
+    <style>
+        :root {
+            /* K-ON 棕黄色主题 (Light) */
+            --bg-color: #fdf8e7;
+            --text-color: #4a3728;
+            --card-bg: linear-gradient(145deg, #f5e6a3, #f9f0c4);
+            --header-bg: linear-gradient(135deg, #d4af37, #ffd700, #ffb347);
+            --footer-bg: linear-gradient(135deg, #f4eed5, #f9f5e8);
+            --border-color: #d4af37;
+            --hover-color: #b8860b;
+            --shadow-color: rgba(212, 175, 55, 0.4);
+            --accent-color: #daa520;
+            --secondary-color: #ffd700;
+            --tea-color: #8b4513;
+        }
+
+        [data-theme="dark"] {
+            /* K-ON 棕黄色主题 (Dark) */
+            --bg-color: #2a2419;
+            --text-color: #f4eed5;
+            --card-bg: #3d3426;
+            --header-bg: linear-gradient(135deg, #8b6f00, #a68200);
+            --footer-bg: #3d3426;
+            --border-color: #5d4e37;
+            --hover-color: #dab500;
+            --shadow-color: rgba(218, 181, 0, 0.3);
+            --accent-color: #eac403;
+            --secondary-color: #d3a201;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            background: var(--header-bg);
+            border-bottom: 2px solid var(--accent-color);
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        header .logo h1 {
+            color: #4a3728;
+            text-shadow: 3px 3px 6px rgba(212, 175, 55, 0.5);
+            font-family: "Ma Shan Zheng", cursive;
+            position: relative;
+        }
+
+        header .logo h1::after {
+            content: '☕ 轻松惬意的茶会时光 ☕';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.32em;
+            color: var(--tea-color);
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        header {
+            padding-bottom: 60px;
+            margin-bottom: 20px;
+        }
+
+        header nav {
+            margin-top: 15px;
+        }
+
+        main {
+            margin-top: 20px;
+        }
+
+        [data-theme="dark"] header .logo h1 {
+            color: #f4eed5;
+            text-shadow: 3px 3px 6px rgba(255, 215, 0, 0.5);
+        }
+
+        .member-card, .fan-work-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 8px 20px var(--shadow-color);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card::before, .fan-work-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--accent-color));
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* 茶杯装饰 */
+        .band-intro::after {
+            content: '☕';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 音符装饰 */
+        body::before {
+            content: '♪ ♫ ♪ ♫';
+            position: fixed;
+            top: 50%;
+            left: -50px;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            opacity: 0.1;
+            animation: musicFloat 15s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes musicFloat {
+            0% { left: -50px; }
+            100% { left: 100vw; }
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Theme toggle button styles */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle i {
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        /* 故事链接样式 */
+        .story-link {
+            display: inline-block !important;
+            margin: 1rem 0 !important;
+            padding: 0.8rem 1.5rem !important;
+            color: #ff8fb1 !important;
+            font-size: 1.2rem !important;
+            font-weight: 800 !important;
+            text-decoration: none !important;
+            border: 2px solid #ff8fb1 !important;
+            border-radius: 25px !important;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            position: relative !important;
+            overflow: hidden !important;
+            font-family: "Ma Shan Zheng", cursive !important;
+            letter-spacing: 1.5px !important;
+            text-shadow: 2px 2px 4px rgba(255, 143, 177, 0.3) !important;
+            background: linear-gradient(45deg, rgba(255, 143, 177, 0.1), rgba(255, 255, 255, 0.2)) !important;
+            box-shadow: 0 4px 15px rgba(255, 143, 177, 0.1) !important;
+            z-index: 2 !important;
+        }
+
+        .story-link:hover {
+            background: linear-gradient(45deg, #ff8fb1, #ffb6c1) !important;
+            color: white !important;
+            transform: translateY(-5px) scale(1.08) !important;
+            box-shadow: 0 10px 25px rgba(255, 143, 177, 0.4) !important;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3) !important;
+            border-color: transparent !important;
+            letter-spacing: 2px !important;
+        }
+
+        .story-link::before {
+            content: '' !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            width: 0 !important;
+            height: 0 !important;
+            background: rgba(255, 255, 255, 0.3) !important;
+            border-radius: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            transition: width 0.8s ease, height 0.8s ease !important;
+            z-index: -1 !important;
+        }
+
+        .story-link:hover::before {
+            width: 400px !important;
+            height: 400px !important;
+        }
+
+        .story-link::after {
+            content: '' !important;
+            position: absolute !important;
+            top: -2px !important;
+            left: -2px !important;
+            right: -2px !important;
+            bottom: -2px !important;
+            background: linear-gradient(45deg, #ff8fb1, #ffb6c1, #ff8fb1) !important;
+            border-radius: 25px !important;
+            z-index: -2 !important;
+            opacity: 0 !important;
+            transition: opacity 0.5s ease !important;
+            background-size: 200% 200% !important;
+        }
+
+        .story-link:hover::after {
+            opacity: 1 !important;
+            animation: borderRotate 3s linear infinite !important;
+        }
+
+        @keyframes borderRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .story-link:active {
+            transform: translateY(-2px) scale(0.95) !important;
+            box-shadow: 0 5px 15px rgba(255, 143, 177, 0.2) !important;
+            transition: all 0.2s ease !important;
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 4px 15px rgba(255, 143, 177, 0.1); }
+            50% { box-shadow: 0 4px 25px rgba(255, 143, 177, 0.3); }
+            100% { box-shadow: 0 4px 15px rgba(255, 143, 177, 0.1); }
+        }
+
+        .story-link {
+            animation: glowPulse 2s infinite !important;
+        }
+
+        /* 新增样式 */
+        .contact-form {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px var(--shadow-color);
+            outline: none;
+        }
+
+        .form-group .error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .submit-btn {
+            background: var(--accent-color);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .submit-btn:hover {
+            background: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+        #baiduMap {
+            width: 100%;
+            height: 400px;
+            border-radius: 15px;
+            margin-top: 2rem;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .location-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* 新增HTML5语义标签样式 */
+        article {
+            margin-bottom: 2rem;
+        }
+
+        figure {
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        figure img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        figure:hover img {
+            transform: scale(1.05);
+        }
+
+        figcaption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        figure:hover figcaption {
+            transform: translateY(0);
+        }
+
+        mark {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.2em 0.5em;
+            border-radius: 4px;
+        }
+
+        /* 键盘导航样式 */
+        .keyboard-nav {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            display: none;
+        }
+
+        .keyboard-nav.show {
+            display: block;
+        }
+
+        .keyboard-nav kbd {
+            background: var(--text-color);
+            color: var(--bg-color);
+            padding: 0.2em 0.5em;
+            border-radius: 4px;
+            margin: 0 0.2em;
+            font-size: 0.9em;
+        }
+
+        .fan-work-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 8px 20px var(--shadow-color);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .fan-work-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px var(--shadow-color);
+        }
+
+        .fan-work-image {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .fan-work-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .fan-work-image a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .fan-work-card:hover .fan-work-image img {
+            transform: scale(1.05);
+        }
+
+        .fan-work-info {
+            padding: 1rem;
+        }
+
+        .fan-work-info a {
+            text-decoration: none;
+            color: var(--text-color);
+            display: block;
+        }
+
+        .fan-work-info h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .fan-work-info p {
+            margin: 0;
+            color: var(--accent-color);
+        }
+
+        .fan-work-card:hover .fan-work-info h3 {
+            color: var(--accent-color);
+        }
+
+        .fan-works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .more-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(145deg, var(--card-bg), var(--accent-color));
+        }
+
+        .more-info .fan-work-info {
+            width: 100%;
+        }
+
+        .more-info a {
+            padding: 2rem;
+        }
+
+        .more-info:hover {
+            background: linear-gradient(145deg, var(--accent-color), var(--card-bg));
+        }
+
+        .member-image {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .member-image a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .member-card:hover .member-image img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="subpage">
+    <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <i class="fas fa-moon"></i>
+    </button>
+    <audio id="background-music"></audio>
+    <div class="clock"></div>
+
+    <header>
+        <div class="logo">
+            <h1>轻音少女</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="index.html" class="active">轻音少女</a></li>
+                <li><a href="../bocchi/index.html">孤独摇滚</a></li>
+                <li><a href="../mygo/index.html">MYGO!!</a></li>
+                <li><a href="../gbc/index.html">Girls Band Cry</a></li>
+                <li><a href="../bandgame/index.html">乐队搭配游戏</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="band-intro">
+            <div class="band-banner">
+                <img src="../images/k-on.cover.avif" alt="轻音少女">
+                <div class="band-info">
+                    <h2 style="color: #e85a8f; font-size: 1.6rem; margin-bottom: 0.5rem;">放学后茶会</h2>
+                    <a href="https://www.bilibili.com/bangumi/play/ep21265?spm_id_from=333.337.0.0" class="story-link" target="_blank">她们的故事</a>
+                    <p class="band-desc" style="margin-top: 0.5rem;">由樱丘高中轻音部所组成，唯用了温泉和茶杯的下半部分作为记号。如名字一样轻松惬意的下午茶式乐队。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="members">
+            <h2>乐队成员</h2>
+            <div class="members-grid">
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="../images/k-on_yui.cover.jpg" alt="平泽唯">
+                        <a href="https://mzh.moegirl.org.cn/%E5%B9%B3%E6%B3%BD%E5%94%AF" target="_blank"></a>
+                    </div>
+                    <div class="member-info">
+                        <h3>平泽唯</h3>
+                        <p class="role">主唱 & 吉他手</p>
+                        <p class="desc">性格天然呆，做事总是慢半拍。虽然一开始对音乐一窍不通，但在加入轻音部后展现出了惊人的音乐天赋。</p>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="../images/k-on_mio.cover.jpg" alt="秋山澪">
+                        <a href="https://mzh.moegirl.org.cn/%E7%A7%8B%E5%B1%B1%E6%BE%AA" target="_blank"></a>
+                    </div>
+                    <div class="member-info">
+                        <h3>秋山澪</h3>
+                        <p class="role">贝斯手</p>
+                        <p class="desc">性格害羞，容易害羞，但弹奏贝斯时非常帅气。</p>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="../images/k-on_ritsu.cover.jpg" alt="田井中律">
+                        <a href="https://mzh.moegirl.org.cn/%E7%94%B0%E4%BA%95%E4%B8%AD%E5%BE%8B" target="_blank"></a>
+                    </div>
+                    <div class="member-info">
+                        <h3>田井中律</h3>
+                        <p class="role">鼓手</p>
+                        <p class="desc">活泼开朗，是轻音部的部长，擅长打鼓。</p>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="../images/k-on_mugi.cover.jpg" alt="琴吹紬">
+                        <a href="https://mzh.moegirl.org.cn/%E7%90%B4%E5%90%B9%E4%8C%B7" target="_blank"></a>
+                    </div>
+                    <div class="member-info">
+                        <h3>琴吹紬</h3>
+                        <p class="role">键盘手</p>
+                        <p class="desc">大小姐气质，性格温柔，擅长钢琴演奏。</p>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="../images/k-on_azusa.cover.jpg" alt="中野梓">
+                        <a href="https://mzh.moegirl.org.cn/%E4%B8%AD%E9%87%8E%E6%A2%93" target="_blank"></a>
+                    </div>
+                    <div class="member-info">
+                        <h3>中野梓</h3>
+                        <p class="role">吉他手</p>
+                        <p class="desc">认真负责，是轻音部的新成员，吉他技术很好。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="music">
+            <h2>代表歌曲</h2>
+            <div class="music-list">
+                <div class="music-item">
+                    <div class="music-info">
+                        <h3>ふわふわ時間(唯&澪 Mix)</h3>
+                        <p>作词：秋山澪 / 作曲：琴吹䌷</p>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                            <img src="../images/k-on_time.webp" alt="" width="200" height="200">
+                            </td>
+                            <td>
+                                <p style="font-family: 'Indie Flower', cursive; font-size: 35px; color: #bd2807; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); line-height: 1.5; letter-spacing: 1px;">
+                                    轻音少女插曲，'流水的轻音部，铁打的滑滑蛋'。
+                                </p>
+                            </td>
+                        </tr>
+                        </table>
+                    <audio controls>
+                        <source src="../music/ふわふわ時間(唯&澪 Mix).mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="music-item">
+                    <div class="music-info">
+                        <h3>天使にふれたよ!</h3>
+                        <p>作词：秋山澪 / 作曲：琴吹䌷</p>
+                    </div>
+                    <table>
+                    <tr>
+                        <td>
+                        <img src="../images/k-on_tianshi.webp" alt="" width="200" height="200">
+                        </td>
+                        <td>
+                            <p style="font-family: 'Indie Flower', cursive; font-size: 35px; color: #bd2807; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); line-height: 1.5; letter-spacing: 1px;">
+                                学姐们送给梓猫的饯别曲，'阿梓喵，以后要作为轻音部部长，独当一面了哦'。
+                            </p>
+                        </td>
+                    </tr>
+                    </table>
+                    <audio controls>
+                        <source src="../music/放課後ティータイム - 天使にふれたよ!.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="music-item">
+                    <div class="music-info">
+                        <h3>Singing!</h3>
+                        <p>作词：秋山澪 / 作曲：琴吹䌷</p>
+                    </div>
+                    <table>
+                    <tr>
+                        <td>
+                        <img src="../images/k-on_Singing!.webp" alt="" width="400" height="400">
+                        </td>
+                        <td>
+                            <p style="font-family: 'Indie Flower', cursive; font-size: 35px; color: #bd2807; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); line-height: 1.5; letter-spacing: 1px;">
+                                轻音少女剧场版片尾曲，'当电影剧场的闪光灯亮起，少女们的磁带终于播放结束，虽然已看不见，但她们的故事仍在继续。'
+                            </p>
+                        </td>
+                    </tr>
+                    </table>
+                    <audio controls>
+                        <source src="../music/放課後ティータイム - Singing!.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </section>
+
+        <section class="fan-works">
+            <h2>二创作品</h2>
+            <div class="fan-works-grid">
+                <div class="fan-work-card">
+                    <div class="fan-work-image">
+                        <img src="../images/k-on_work(1).png" alt="区区一只呆唯！">
+                        <a href="https://www.bilibili.com/video/BV1yi4y1w7sg/?spm_id_from=333.337.search-card.all.click&vd_source=4e92e389adb70c2b62358e1d68c9382c" target="_blank" rel="noopener noreferrer"></a>
+                    </div>
+                    <div class="fan-work-info">
+                        <h3>区区一只呆唯！</h3>
+                        <p>295w+</p>
+                    </div>
+                </div>
+                <div class="fan-work-card">
+                    <div class="fan-work-image">
+                        <img src="../images/k-on_work(2).png" alt="呆唯的痛谁能懂">
+                        <a href="https://www.bilibili.com/video/BV1mz4y1f7yB/?spm_id_from=333.337.search-card.all.click" target="_blank" rel="noopener noreferrer"></a>
+                    </div>
+                    <div class="fan-work-info">
+                        <h3>呆唯的痛谁能懂</h3>
+                        <p>播放量：195w+</p>
+                    </div>
+                </div>
+                <div class="fan-work-card">
+                    <div class="fan-work-image">
+                        <img src="../images/k-on_work(3).png" alt="你们正在交往吗？">
+                        <a href="https://www.bilibili.com/video/BV11M4y1q7Gi/?spm_id_from=333.337.search-card.all.click&vd_source=4e92e389adb70c2b62358e1d68c9382c" target="_blank" rel="noopener noreferrer"></a>
+                    </div>
+                    <div class="fan-work-info">
+                        <h3>你们正在交往吗？</h3>
+                        <p>播放量：110w+</p>
+                    </div>
+                </div>
+                <div class="fan-work-card more-info">
+                    <div class="fan-work-info">
+                        <a href="https://search.bilibili.com/all?vt=01302673&keyword=%E8%BD%BB%E9%9F%B3%E5%B0%91%E5%A5%B3&from_source=webtop_search&spm_id_from=333.1007&search_source=5" target="_blank" rel="noopener noreferrer">
+                            <h3>更多信息</h3>
+                            <p>点击查看更多轻音少女相关内容</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>关于本站</h3>
+                <p>所谓乐队啊，就是一群有一堆想说的话的人聚在了一起</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="../index.html">首页</a></li>
+                        <li><a href="index.html">轻音少女</a></li>
+                        <li><a href="../bocchi/index.html">孤独摇滚</a></li>
+                        <li><a href="../mygo/index.html">MYGO!!</a></li>
+                        <li><a href="../gbc/index.html">Girls Band Cry</a></li>
+                    </ul>
+            </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Girls Band Animation 版权所有</p>
+        </div>
+    </footer>
+    
+    <script src="../js/script.js"></script>
+    <script src="../js/clock.js"></script>
+    <script src="music-player.js"></script>
+    <script>
+    </script>
+</body>
+</html> 

@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Girls Band Stage Reimagined</title>
+    <meta name="description" content="以轻音少女、孤独摇滚、MyGO!!!!!、Girls Band Cry 为灵感重做的少女乐队主题多页面站点。">
+    <link rel="stylesheet" href="css/site.css">
+</head>
+<body class="page-home" data-page="home">
+    <div class="site-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">
+                <strong>Girls Band Stage Reimagined</strong>
+                <span>Multi-Stage Portal</span>
+            </a>
+            <nav class="header-nav">
+                <a href="#top">开场</a>
+                <a href="#stages">选舞台</a>
+                <a href="#quick">今夜推荐</a>
+                <a href="bandgame.html">搭配游戏</a>
+            </nav>
+            <a class="outline-link" href="../index.html">返回原站</a>
+        </header>
+
+        <main>
+            <section class="hero-section" id="top" data-nav-section>
+                <article class="hero-copy home-hero-copy">
+                    <span class="eyebrow">Stage Lobby</span>
+                    <h1 id="heroTitle">MyGO!!!!!</h1>
+                    <p id="heroSummary">首页不再堆满所有内容，而是像演出场馆大厅一样，只负责把你送进正确的舞台。</p>
+                    <div class="hero-actions">
+                        <a class="primary-link" id="heroEnter" href="bands/mygo.html">进入当前专题页</a>
+                        <button class="action-btn secondary" id="heroRandomStage" type="button">随机进入一支乐队</button>
+                        <a class="ghost-link" id="heroResume" href="bands/mygo.html">继续上次舞台</a>
+                    </div>
+                    <ul class="hero-meta" id="heroMeta"></ul>
+                </article>
+
+                <aside class="hero-visual home-lobby-panel">
+                    <div class="stage-frame">
+                        <img id="heroImage" src="../images/mygo.cover.avif" alt="MyGO!!!!!">
+                        <div class="stage-caption">
+                            <span id="heroOriginal">BanG Dream! It's MyGO!!!!! · Rainy Blue Theatre</span>
+                            <strong id="heroTagline">四个主舞台已经拆分出去，现在每个入口都通向独立专题页。</strong>
+                        </div>
+                    </div>
+                    <div class="hero-side-note home-hero-side">
+                        <span class="section-kicker">Current Palette</span>
+                        <div class="swatch-row" id="heroPalette"></div>
+                    </div>
+                </aside>
+            </section>
+
+            <section class="selector-section section-block" id="stages" data-nav-section>
+                <div>
+                    <div class="section-heading">
+                        <div>
+                            <span class="section-kicker">Stage Switch</span>
+                            <h2>挑一个今晚要先走进去的舞台</h2>
+                        </div>
+                        <p>首页只做入口分流。真正完整的内容、互动和风格，都放在各自的乐队子页面里。</p>
+                    </div>
+                    <div class="selector-strip" id="stageSelector"></div>
+                </div>
+                <aside class="selector-detail" id="selectorDetail"></aside>
+            </section>
+
+            <section class="section-block" id="portals">
+                <div class="section-heading">
+                    <div>
+                        <span class="section-kicker">Main Portals</span>
+                        <h2>四个独立主页面</h2>
+                    </div>
+                    <p>每个入口都保留自己的标题轮廓、按钮语言、材质和信息编排方式。</p>
+                </div>
+                <div class="band-grid" id="bandGrid"></div>
+            </section>
+
+            <section class="section-block" id="quick" data-nav-section>
+                <div class="section-heading">
+                    <div>
+                        <span class="section-kicker">Tonight</span>
+                        <h2>今夜推荐与快速体验</h2>
+                    </div>
+                    <p>如果你不想先读完整专题页，也可以直接从这里听一首、开一次随机舞台，或者进入小游戏。</p>
+                </div>
+                <div class="band-grid-two home-quick-grid">
+                    <article class="info-panel home-action-panel" id="homeActions"></article>
+                    <article class="info-panel">
+                        <div class="section-heading section-heading--compact">
+                            <div>
+                                <span class="section-kicker">Featured Tracks</span>
+                                <h3>四个舞台各放一首歌</h3>
+                            </div>
+                        </div>
+                        <div class="setlist-grid" id="setlistGrid"></div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section-block" id="game">
+                <div class="section-heading">
+                    <div>
+                        <span class="section-kicker">Band Builder</span>
+                        <h2>搭配小游戏继续保留在独立页</h2>
+                    </div>
+                    <p>专题页负责沉浸式浏览，混编乐队的玩法则交给单独页面承载，避免所有功能都挤在首页。</p>
+                </div>
+                <article class="info-panel game-promo">
+                    <div>
+                        <h3>把四个世界的人重新编成一支乐队</h3>
+                        <p>预算、借钱、组合加成和隐藏事件都保留着。现在它像一张真正的后台名单板，和专题页气质也更统一。</p>
+                        <div class="hero-actions">
+                            <a class="primary-link" href="bandgame.html">打开搭配游戏</a>
+                            <a class="ghost-link" href="#stages">先选一支乐队页看看</a>
+                        </div>
+                    </div>
+                    <div class="game-promo-art" id="gameAccentSwatches"></div>
+                </article>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <article class="footer-block">
+                    <h3>这版首页的角色</h3>
+                    <p>它现在更像总入口和导览大厅，不再试图承载所有图文、歌单和乐队信息。</p>
+                </article>
+                <article class="footer-block">
+                    <h3>快速入口</h3>
+                    <div class="footer-links">
+                        <a href="bands/k-on.html">轻音少女</a>
+                        <a href="bands/bocchi.html">孤独摇滚</a>
+                        <a href="bands/mygo.html">MyGO!!!!!</a>
+                        <a href="bands/gbc.html">Girls Band Cry</a>
+                        <a href="bandgame.html">搭配游戏</a>
+                    </div>
+                </article>
+                <article class="footer-block">
+                    <h3>并行版本说明</h3>
+                    <p>这一整套页面仍然都放在 <code>stage-reimagined</code> 下，原站源码保持不动。</p>
+                </article>
+            </div>
+            <div class="footer-bottom">Stage Reimagined · Multi-page build inside <code>stage-reimagined</code></div>
+        </footer>
+    </div>
+
+    <script src="js/bands-data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

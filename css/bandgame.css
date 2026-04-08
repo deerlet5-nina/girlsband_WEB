@@ -1,0 +1,1842 @@
+/* 乐队搭配游戏的CSS样式 */
+:root {
+    --primary-color: #633CAE;
+    --secondary-color: #F2A25C;
+    --background-color: #f9f9f9;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --highlight-color: #FF69B4;
+    --selected-color: #e0f7fa;
+    --border-color: #ddd;
+    --positive-color: #4CAF50;
+    --negative-color: #F44336;
+    --warning-color: #FF9800;
+    --info-color: #2196F3;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Header and Navigation Styles */
+header {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+nav {
+    background-color: #522d99;
+    padding: 0.5rem 0;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+}
+
+nav li {
+    margin: 0 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+nav a.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+}
+
+/* Main Container Styles */
+.container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* 新的游戏容器布局 - 优化空间利用 */
+.game-container {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    grid-template-rows: 500px 1fr;
+    gap: 2rem;
+    min-height: 800px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+/* 左侧面板样式 */
+.left-panel {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+}
+
+/* 右侧面板样式 - 限制高度以留出下方空间 */
+.right-panel {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 1.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+}
+
+/* 游戏介绍部分 */
+.intro-section {
+    flex: 1;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    overflow-y: auto;
+}
+
+/* 评估部分 */
+.evaluation-section {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+/* 可滚动的成员区域 */
+.members-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* 游戏规则样式 */
+.game-rules {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.game-rules h3 {
+    margin-bottom: 0.8rem;
+    color: var(--primary-color);
+}
+
+.rule-item {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* 预算显示样式 */
+.budget-display {
+    margin-bottom: 1.5rem;
+    padding: 0.8rem;
+    background-color: #f0f8ff;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    overflow: visible;
+}
+
+/* 预算数字和单位同行显示 */
+.budget-display .budget-text {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.3rem;
+}
+
+.budget-amount {
+    color: var(--primary-color);
+    font-size: 1.4rem;
+}
+
+/* 借钱按钮样式 */
+.borrow-button {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #8B4513;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    border: 2px solid #FFD700;
+}
+
+.borrow-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+    border-color: #FFA500;
+}
+
+.borrow-button:disabled {
+    background: linear-gradient(135deg, #D3D3D3, #A9A9A9);
+    color: #696969;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    border-color: #D3D3D3;
+}
+
+.borrow-button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3);
+}
+
+/* 音效按钮样式 */
+.sound-toggle {
+    background: linear-gradient(135deg, #9C27B0, #E91E63);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3);
+    border: 2px solid #9C27B0;
+    position: relative;
+    overflow: hidden;
+}
+
+.sound-toggle:hover {
+    background: linear-gradient(135deg, #E91E63, #F06292);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.4);
+    border-color: #E91E63;
+}
+
+.sound-toggle:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(233, 30, 99, 0.3);
+}
+
+/* 音效按钮禁用状态 */
+.sound-toggle:disabled {
+    background: linear-gradient(135deg, #9E9E9E, #757575);
+    color: #BDBDBD;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    border-color: #9E9E9E;
+}
+
+/* 音效波纹效果 */
+.sound-toggle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.sound-toggle:hover::before {
+    width: 120%;
+    height: 120%;
+}
+
+/* 音效按钮闪烁效果（当音乐播放时） */
+.sound-toggle.playing {
+    animation: soundPulse 1s ease-in-out infinite;
+}
+
+@keyframes soundPulse {
+    0%, 100% {
+        box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 15px rgba(156, 39, 176, 0.6);
+    }
+}
+
+/* 借钱消息样式 */
+.borrow-message {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    animation: slideIn 0.5s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.borrow-message.positive {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-left: 5px solid var(--positive-color);
+    color: #2e7d32;
+}
+
+.borrow-message.negative {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    border-left: 5px solid var(--negative-color);
+    color: #c62828;
+}
+
+.borrow-message.warning {
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    border-left: 5px solid var(--warning-color);
+    color: #ef6c00;
+}
+
+.borrow-message.neutral {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-left: 5px solid var(--info-color);
+    color: #1565c0;
+}
+
+.borrow-content {
+    position: relative;
+    z-index: 2;
+}
+
+.borrow-content p {
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+/* 再借一次按钮样式 */
+.borrow-again-btn {
+    background: linear-gradient(135deg, #FF69B4, #FF1493);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(255, 20, 147, 0.3);
+    animation: pulse 2s infinite;
+}
+
+.borrow-again-btn:hover {
+    background: linear-gradient(135deg, #FF1493, #DC143C);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(255, 20, 147, 0.4);
+}
+
+.borrow-again-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(255, 20, 147, 0.3);
+}
+
+/* 添加特殊效果 */
+.borrow-message.positive::before {
+    content: '💰';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    opacity: 0.6;
+    animation: float 2s ease-in-out infinite;
+}
+
+.borrow-message.negative::before {
+    content: '💸';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    opacity: 0.6;
+    animation: shake 0.5s ease-in-out;
+}
+
+.borrow-message.warning::before {
+    content: '🍮';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    opacity: 0.6;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+.borrow-message.neutral::before {
+    content: '😊';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    opacity: 0.6;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* 借钱头像样式 */
+.borrow-avatar {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    z-index: 100;
+    opacity: 0;
+    transform: scale(0.3) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+}
+
+.borrow-avatar.show {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+.borrow-avatar.hide {
+    opacity: 0;
+    transform: scale(0.3) translateY(-20px);
+    transition: all 0.5s ease-in;
+}
+
+.avatar-frame {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    padding: 3px;
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: avatarPulse 2s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.borrow-avatar.positive .avatar-frame {
+    background: linear-gradient(45deg, #4CAF50, #81C784);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+.borrow-avatar.negative .avatar-frame {
+    background: linear-gradient(45deg, #F44336, #EF5350);
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+    animation: avatarShake 0.6s ease-in-out 3;
+}
+
+.borrow-avatar.warning .avatar-frame {
+    background: linear-gradient(45deg, #FF9800, #FFB74D);
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+    animation: avatarBounce 1s ease-in-out infinite;
+}
+
+.borrow-avatar.neutral .avatar-frame {
+    background: linear-gradient(45deg, #2196F3, #64B5F6);
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+}
+
+.avatar-frame img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 头像动画效果 */
+@keyframes avatarPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+}
+
+@keyframes avatarShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-3px);
+    }
+    75% {
+        transform: translateX(3px);
+    }
+}
+
+@keyframes avatarBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* 特殊效果 - 闪光边框 */
+.borrow-avatar.positive .avatar-frame::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    animation: shimmer 2s linear infinite;
+    z-index: -1;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 负面效果 - 红色光晕 */
+.borrow-avatar.negative .avatar-frame::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(244, 67, 54, 0.3) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    animation: redGlow 1s ease-in-out infinite alternate;
+    z-index: -1;
+}
+
+@keyframes redGlow {
+    0% {
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .borrow-avatar {
+        top: -5px;
+        right: -5px;
+    }
+    
+    .avatar-frame {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* 已选择成员容器 */
+.selected-members-container {
+    margin-bottom: 1.5rem;
+}
+
+.selected-members-container h3 {
+    margin-bottom: 0.8rem;
+    color: var(--primary-color);
+}
+
+#selected-members {
+    min-height: 100px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.8rem;
+    background-color: white;
+}
+
+.empty-message {
+    color: #999;
+    text-align: center;
+    padding: 1rem;
+    font-style: italic;
+}
+
+#requirements-check {
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+}
+
+.requirements-missing {
+    color: #e53935;
+    font-weight: bold;
+}
+
+.requirements-met {
+    color: #43a047;
+    font-weight: bold;
+}
+
+/* 乐队部分样式 */
+.band-section {
+    margin-bottom: 2rem;
+}
+
+.band-section h3 {
+    margin-bottom: 0.8rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.3rem;
+}
+
+.band-members {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+/* 成员卡片样式 */
+.member-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+}
+
+.member-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.member-card.selected {
+    background-color: var(--selected-color);
+    border-color: var(--primary-color);
+}
+
+.member-card.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.member-image {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    position: relative;
+}
+
+.member-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.member-info {
+    padding: 0.6rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.member-name {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem;
+    margin-top: 0.2rem;
+}
+
+/* 左侧属性组 */
+.left-attributes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+/* 右侧属性组 */
+.right-attributes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.info-item {
+    font-size: 0.8rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 1.2rem;
+}
+
+/* 乐队名称单独一行 */
+.info-item.band {
+    grid-column: 1 / -1;
+    margin-bottom: 0.2rem;
+}
+
+/* 技能值单独一行 */
+.info-item.skill {
+    grid-column: 1 / -1;
+    margin-top: 0.2rem;
+}
+
+/* 能力值单独一行 */
+.info-item.abilities {
+    grid-column: 1 / -1;
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+    height: auto;
+}
+
+.info-item .label {
+    color: #e85a8f;
+    font-weight: bold;
+    min-width: 35px;
+    flex-shrink: 0;
+}
+
+/* 右侧属性组的标签宽度调整 */
+.info-item.role .label,
+.info-item.chemistry .label,
+.info-item.cost .label {
+    min-width: 30px;
+}
+
+.member-role {
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.member-cost {
+    color: var(--secondary-color);
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: right;
+}
+
+.member-skills {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.skill-item {
+    margin-bottom: 0.2rem;
+}
+
+.chemistry-info {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+/* 评分部分样式 */
+.score-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.score-item {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.score-item h3 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    font-size: 1rem;
+}
+
+.score-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+#special-combos {
+    text-align: left;
+    font-size: 0.9rem;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* 特殊组合滚动条样式 */
+#special-combos::-webkit-scrollbar {
+    width: 6px;
+}
+
+#special-combos::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+#special-combos::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+#special-combos::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* 特殊组合区域跨列显示，让文字有更大的展示空间 */
+.score-grid .score-item:nth-child(3) {
+    grid-column: span 2;
+    text-align: left;
+}
+
+/* 确保特殊组合标题居中 */
+.score-grid .score-item:nth-child(3) h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.combo-item {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0.8rem;
+    background-color: #fff3e0;
+    border-radius: 6px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.combo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.3rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.combo-name {
+    font-weight: bold;
+    color: #333;
+    flex: 1;
+    min-width: 0;
+}
+
+.combo-bonus {
+    font-weight: bold;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.combo-bonus.positive {
+    background-color: var(--positive-color);
+    color: white;
+}
+
+.combo-bonus.negative {
+    background-color: var(--negative-color);
+    color: white;
+}
+
+.combo-detail {
+    font-size: 0.8rem;
+    color: #666;
+    font-style: italic;
+    line-height: 1.3;
+    margin-top: 0.3rem;
+}
+
+.combo-effects {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-top: 0.3rem;
+    padding: 0.3rem 0.5rem;
+    background: rgba(99, 60, 174, 0.1);
+    border-radius: 4px;
+    border-left: 3px solid var(--primary-color);
+}
+
+.total-score-container {
+    grid-column: span 2;
+    background-color: #e8f5e9;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.total-score-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2e7d32;
+    margin-bottom: 0.5rem;
+}
+
+#band-evaluation {
+    margin-top: 1rem;
+}
+
+.evaluation-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.evaluation-description {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.evaluation-bonus {
+    font-weight: bold;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+.special-pairings {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid var(--accent-color);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.special-pairings h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--accent-color);
+}
+
+.special-combo {
+    font-weight: bold;
+    color: var(--accent-color);
+    margin-bottom: 5px;
+}
+
+/* 游戏控制按钮 */
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.reset-button:hover {
+    background-color: #d32f2f;
+}
+
+.evaluate-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px rgba(99, 60, 174, 0.2);
+}
+
+.evaluate-button:hover:not([disabled]) {
+    background-color: #7e57c2;
+    transform: translateY(-2px);
+}
+
+.evaluate-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 响应式设计 */
+@media (max-width: 1100px) {
+    .game-container {
+        grid-template-columns: 320px 1fr;
+        grid-template-rows: 400px 1fr;
+    }
+    
+    .left-panel {
+        grid-column: 1;
+        grid-row: 1 / 3;
+        border-right: 1px solid var(--border-color);
+    }
+    
+    .right-panel {
+        grid-column: 2;
+        grid-row: 1;
+        max-height: 400px;
+    }
+    
+    .evaluation-expansion-area {
+        grid-column: 2;
+        grid-row: 2;
+        min-height: 250px;
+    }
+    
+    #detailed-evaluation-container .evaluation-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    #detailed-evaluation-container .member-grid {
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        gap: 0.6rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-container {
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: none;
+        grid-template-rows: none;
+    }
+    
+    .left-panel {
+        grid-column: unset;
+        grid-row: unset;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .right-panel {
+        grid-column: unset;
+        grid-row: unset;
+        max-height: none;
+    }
+    
+    .evaluation-expansion-area {
+        grid-column: unset;
+        grid-row: unset;
+        margin: 1rem 0;
+    }
+    
+    #detailed-evaluation-container .evaluation-content {
+        grid-template-columns: 1fr;
+    }
+    
+    #detailed-evaluation-container .member-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .score-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .total-score-container {
+        grid-column: 1;
+    }
+    
+    nav ul {
+        flex-wrap: wrap;
+    }
+    
+    nav li {
+        margin: 0.3rem;
+    }
+    
+    .band-members {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .member-card {
+        height: 240px;
+    }
+    
+    .member-image {
+        height: 130px;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 0.2rem;
+    }
+}
+
+/* 乐队评估样式 - 增强版 */
+#evaluationResult {
+    margin-top: 1rem;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-height: none;
+    overflow-y: visible;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* 详细评估扩展模式 - 利用右侧下方空间 */
+#evaluationResult.detailed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    background-color: white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    z-index: 10;
+}
+
+/* 创建详细评估的容器区域 */
+.evaluation-expansion-area {
+    grid-column: 2;
+    grid-row: 2;
+    position: relative;
+    padding: 1.5rem;
+    min-height: 300px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* 详细评估容器样式 */
+#detailed-evaluation-container {
+    position: relative;
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--primary-color);
+    height: 100%;
+    overflow-y: auto;
+    animation: slideInFromRight 0.5s ease-out;
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 评估摘要样式 */
+.evaluation-summary {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border: 2px solid #2196f3;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.summary-header h3 {
+    color: var(--primary-color);
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.summary-score {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.summary-note {
+    color: #666;
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    animation: fadeIn 1s ease-in;
+}
+
+.evaluation-summary::before {
+    content: '🎶';
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    opacity: 0.3;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+.evaluation-message {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    opacity: 1;
+    animation: fadeIn 0.5s forwards;
+    padding: 1rem;
+    text-align: center;
+}
+
+.evaluation-message.loading {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* 详细评估样式 */
+.detailed-evaluation {
+    margin: 0;
+    padding: 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 扩展模式下的详细评估布局 */
+#evaluationResult.detailed .detailed-evaluation {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2rem;
+    margin: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+#evaluationResult.detailed .evaluation-header {
+    grid-column: 1 / -1;
+}
+
+#evaluationResult.detailed .evaluation-content {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2rem;
+    padding: 1.5rem;
+}
+
+#evaluationResult.detailed .evaluation-description {
+    grid-column: 1 / -1;
+    margin-bottom: 2rem;
+}
+
+/* 扩展区域中的详细评估布局优化 */
+#detailed-evaluation-container .detailed-evaluation {
+    display: block;
+    margin: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+#detailed-evaluation-container .evaluation-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1.5rem;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+#detailed-evaluation-container .evaluation-description {
+    grid-column: 1 / -1;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #333;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+/* 在扩展区域中优化成员网格 */
+#detailed-evaluation-container .member-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.8rem;
+}
+
+/* 在扩展区域中优化分数展示 */
+#detailed-evaluation-container .score-breakdown {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#detailed-evaluation-container .special-combos-detail {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border: 1px solid #ffeaa7;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+}
+
+#detailed-evaluation-container .band-suggestions {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border: 1px solid #c8e6c9;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+}
+
+/* 收起按钮样式 */
+.collapse-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.collapse-button:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* 扩展提示动画 */
+#evaluationResult.detailed::before {
+    content: '🎵 详细评估已扩展至全屏模式';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.evaluation-header {
+    padding: 1.5rem;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+.evaluation-header h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.evaluation-score {
+    font-size: 1.2rem;
+    font-weight: bold;
+    opacity: 0.9;
+}
+
+.evaluation-content {
+    padding: 1.5rem;
+}
+
+.evaluation-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: #555;
+}
+
+/* 得分详情 */
+.score-breakdown {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.score-breakdown h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.5rem;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding: 0.3rem 0;
+}
+
+.score-value {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.score-value.positive {
+    color: var(--positive-color);
+}
+
+.score-value.negative {
+    color: var(--negative-color);
+}
+
+.score-total {
+    border-top: 2px solid #ddd;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.total-value {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+/* 成员展示 */
+.member-showcase {
+    margin-bottom: 1.5rem;
+}
+
+.member-showcase h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.5rem;
+}
+
+.member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+/* 扩展模式下的成员网格 */
+#evaluationResult.detailed .member-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.2rem;
+}
+
+.member-highlight {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 8px;
+    padding: 0.8rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+}
+
+.member-thumb {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.8rem;
+}
+
+.member-details {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.member-band {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.member-role {
+    color: var(--primary-color);
+    font-size: 0.8rem;
+}
+
+/* 特殊组合详情 */
+.special-combos-detail {
+    margin-bottom: 1.5rem;
+}
+
+.special-combos-detail h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.5rem;
+}
+
+.combo-detail-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.combo-detail-item .combo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.combo-detail-item .combo-name {
+    font-weight: bold;
+    color: #333;
+    font-size: 1rem;
+}
+
+.combo-detail-item .combo-bonus {
+    font-weight: bold;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.combo-evaluation {
+    line-height: 1.5;
+    color: #555;
+    font-style: italic;
+}
+
+/* 专业建议 */
+.band-suggestions {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.band-suggestions h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.5rem;
+}
+
+.suggestion-item {
+    padding: 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.suggestion-item.positive {
+    background: #e8f5e9;
+    border-left: 4px solid var(--positive-color);
+    color: #2e7d32;
+}
+
+.suggestion-item.warning {
+    background: #fff3e0;
+    border-left: 4px solid var(--warning-color);
+    color: #f57c00;
+}
+
+.suggestion-item.info {
+    background: #e3f2fd;
+    border-left: 4px solid var(--info-color);
+    color: #1976d2;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.evaluation-message.positive {
+    color: #4caf50;
+}
+
+.evaluation-message.neutral {
+    color: #2196f3;
+}
+
+.evaluation-message.warning {
+    color: #ff9800;
+}
+
+.evaluation-message.negative {
+    color: #f44336;
+}
+
+.eval-button {
+    background: linear-gradient(135deg, #6e6ec7, #cd82ff);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.eval-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(135deg, #7d7de0, #df93ff);
+}
+
+.eval-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.eval-button:disabled {
+    background: #3a3a48;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+.eval-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.eval-button:hover::before {
+    opacity: 1;
+    animation: shine 1.5s infinite;
+}
+
+@keyframes shine {
+    0% {
+        transform: translateX(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) rotate(45deg);
+    }
+}
+
+/* 已选择成员样式 */
+.selected-member {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    background-color: var(--selected-color);
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+}
+
+.selected-member-info {
+    display: flex;
+    align-items: center;
+}
+
+.selected-member-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+}
+
+.selected-member-details {
+    font-size: 0.9rem;
+}
+
+.remove-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.remove-btn:hover {
+    background-color: #d32f2f;
+    transform: scale(1.1);
+}
+
+/* 成员卡片中的能力标签 */
+.ability-tag {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.3rem;
+    margin-top: 0.3rem;
+    background-color: var(--highlight-color);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+/* 分析部分样式 */
+.analysis-section {
+    background: white;
+    border-radius: 6px;
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid #eee;
+}
+
+.analysis-section strong {
+    color: var(--primary-color);
+}
+
+/* 增强效果显示样式 */
+.enhanced {
+    color: #FF6B35;
+    font-weight: bold;
+    text-shadow: 0 0 3px rgba(255, 107, 53, 0.3);
+    animation: enhancedGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes enhancedGlow {
+    0% {
+        color: #FF6B35;
+        text-shadow: 0 0 3px rgba(255, 107, 53, 0.3);
+    }
+    100% {
+        color: #FF8C42;
+        text-shadow: 0 0 6px rgba(255, 107, 53, 0.6);
+    }
+}
+
+.analysis-section small {
+    color: #999;
+    font-size: 0.8rem;
+} 

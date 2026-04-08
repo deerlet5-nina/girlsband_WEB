@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户登录 - Girls Band Animation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f5f5f5;
+            --border-color: #e0e0e0;
+            --hover-color: #e85a8f;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-bg: #2d2d2d;
+            --border-color: #404040;
+            --hover-color: #ff6b9c;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Ma Shan Zheng", cursive;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .login-container {
+            background: rgba(45, 45, 45, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #e85a8f, #bd4f8c);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .login-header h1 {
+            color: #e85a8f;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(232, 90, 143, 0.2);
+        }
+
+        [data-theme="dark"] .login-header h1 {
+            color: #ff6b9c;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        [data-theme="dark"] .login-header p {
+            color: #ccc;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #e85a8f;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        [data-theme="dark"] .form-group label {
+            color: #ff6b9c;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid rgba(232, 90, 143, 0.3);
+            border-radius: 12px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: "Ma Shan Zheng", cursive;
+        }
+
+        [data-theme="dark"] .form-group input {
+            background-color: rgba(45, 45, 45, 0.8);
+            color: #fff;
+            border-color: rgba(255, 107, 156, 0.4);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #e85a8f;
+            box-shadow: 0 0 0 3px rgba(232, 90, 143, 0.2);
+            transform: translateY(-2px);
+        }
+
+        [data-theme="dark"] .form-group input:focus {
+            border-color: #ff6b9c;
+            box-shadow: 0 0 0 3px rgba(255, 107, 156, 0.3);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #e85a8f, #bd4f8c);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(232, 90, 143, 0.3);
+            font-family: "Ma Shan Zheng", cursive;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(232, 90, 143, 0.4);
+            letter-spacing: 3px;
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .form-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-links a {
+            color: #e85a8f;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        [data-theme="dark"] .form-links a {
+            color: #ff6b9c;
+        }
+
+        .form-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #e85a8f, #bd4f8c);
+            transition: width 0.3s ease;
+        }
+
+        .form-links a:hover::after {
+            width: 100%;
+        }
+
+        .back-to-home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-to-home a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        [data-theme="dark"] .back-to-home a {
+            color: #ccc;
+        }
+
+        .back-to-home a:hover {
+            color: #e85a8f;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        [data-theme="dark"] .theme-toggle i {
+            color: #fff;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+            color: #e85a8f;
+            font-size: 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        /* 视频播放器样式 */
+        .video-section {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(232, 90, 143, 0.2);
+            background: #000;
+            min-height: 225px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-error {
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            font-family: "Ma Shan Zheng", cursive;
+        }
+
+        .video-error i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ff4444;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .video-overlay.hidden {
+            opacity: 0;
+        }
+
+        .play-button {
+            background: linear-gradient(135deg, #e85a8f, #bd4f8c);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 90, 143, 0.4);
+            pointer-events: all;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(232, 90, 143, 0.6);
+        }
+
+        .play-button i {
+            color: white;
+            font-size: 1.5rem;
+            margin-left: 3px;
+        }
+
+        .video-title {
+            color: #e85a8f;
+            font-size: 1rem;
+            margin-top: 1rem;
+            font-family: "Ma Shan Zheng", cursive;
+            font-weight: 600;
+        }
+
+        [data-theme="dark"] .video-title {
+            color: #ff6b9c;
+        }
+
+        /* 视频播放时的样式 */
+        .video-container.playing .video-overlay {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .login-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-links {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .video-container {
+                max-width: 300px;
+            }
+        }
+
+        .captcha-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .captcha-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .captcha-image {
+            background: linear-gradient(135deg, #e85a8f, #bd4f8c);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            user-select: none;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .refresh-btn {
+            background: none;
+            border: none;
+            color: #e85a8f;
+            cursor: pointer;
+            padding: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: rotate(180deg);
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            min-height: 20px;
+        }
+
+        .login-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="login-container">
+        <div class="login-header">
+            <h1>用户登录</h1>
+            <p>欢迎来到 Girls Band Animation</p>
+        </div>
+
+        <!-- 视频播放区域 -->
+        <div class="video-section">
+            <div class="video-container">
+                <video id="loginVideo" controls preload="metadata" poster="">
+                    您的浏览器不支持视频播放。
+                </video>
+                <div class="video-overlay">
+                    <button class="play-button" id="playButton">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+            </div>
+            <p class="video-title">少年，你愿意看一辈子少女乐队吗？</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">学号</label>
+                <input type="text" id="username" name="username" required placeholder="请输入233开头的10位学号" value="2330416032">
+                <div id="usernameError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" required placeholder="请输入密码(123456)" value="123456">
+                <div id="passwordError" class="error-message"></div>
+            </div>
+
+            <div class="form-group captcha-group">
+                <label for="captcha">验证码</label>
+                <div class="captcha-container">
+                    <input type="text" id="captcha" name="captcha" required placeholder="请输入验证码" maxlength="6">
+                    <div id="captchaImage" class="captcha-image"></div>
+                    <button type="button" id="refreshCaptcha" class="refresh-btn">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <div id="captchaError" class="error-message"></div>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn" disabled>登录</button>
+
+            <div class="loading" id="loading">
+                <i class="fas fa-spinner"></i>
+                <p>正在登录...</p>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i>
+                登录成功！正在跳转...
+            </div>
+
+            <div class="form-links">
+                <a href="mailto:admin@example.com">忘记密码？</a>
+                <a href="mailto:admin@example.com">注册账号</a>
+            </div>
+        </form>
+
+        <div class="back-to-home">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
+        });
+
+        function updateIcon(theme) {
+            icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        // 视频播放器功能
+        const video = document.getElementById('loginVideo');
+        const playButton = document.getElementById('playButton');
+        const videoContainer = document.querySelector('.video-container');
+        const videoOverlay = document.querySelector('.video-overlay');
+
+        // 动态设置视频源
+        const videoFileName = 'girls-band-video.mp4';
+        video.src = videoFileName;
+
+        // 视频加载错误处理
+        video.addEventListener('error', function(e) {
+            console.error('视频加载失败:', e);
+            console.error('尝试的视频路径:', video.src);
+            console.error('错误代码:', video.error ? video.error.code : '未知');
+            
+            const videoTitle = document.querySelector('.video-title');
+            videoTitle.textContent = '视频加载失败，请检查网络连接';
+            videoTitle.style.color = '#ff4444';
+            
+            // 隐藏播放按钮
+            playButton.style.display = 'none';
+            
+            // 显示错误信息
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'video-error';
+            errorDiv.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>视频加载失败</p>
+                <p>请确保通过HTTP服务器访问此页面</p>
+            `;
+            videoContainer.appendChild(errorDiv);
+        });
+
+        // 视频加载成功
+        video.addEventListener('loadeddata', function() {
+            console.log('视频加载成功，路径:', video.src);
+            const videoTitle = document.querySelector('.video-title');
+            videoTitle.style.color = '#e85a8f';
+            videoTitle.textContent = '少年，你愿意看一辈子少女乐队吗？';
+            playButton.style.display = 'flex';
+        });
+
+        // 视频可以播放时
+        video.addEventListener('canplay', function() {
+            console.log('视频可以播放');
+            playButton.style.display = 'flex';
+        });
+
+        // 播放按钮点击事件
+        playButton.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playButton.innerHTML = '<i class="fas fa-pause"></i>';
+                videoContainer.classList.add('playing');
+            } else {
+                video.pause();
+                playButton.innerHTML = '<i class="fas fa-play"></i>';
+                videoContainer.classList.remove('playing');
+            }
+        });
+
+        // 视频播放事件
+        video.addEventListener('play', () => {
+            playButton.innerHTML = '<i class="fas fa-pause"></i>';
+            videoContainer.classList.add('playing');
+        });
+
+        // 视频暂停事件
+        video.addEventListener('pause', () => {
+            playButton.innerHTML = '<i class="fas fa-play"></i>';
+            videoContainer.classList.remove('playing');
+        });
+
+        // 视频结束事件
+        video.addEventListener('ended', () => {
+            playButton.innerHTML = '<i class="fas fa-play"></i>';
+            videoContainer.classList.remove('playing');
+        });
+
+        // 鼠标悬停显示控制按钮
+        videoContainer.addEventListener('mouseenter', () => {
+            if (!video.paused) {
+                videoOverlay.style.opacity = '0.8';
+            }
+        });
+
+        videoContainer.addEventListener('mouseleave', () => {
+            if (!video.paused) {
+                videoOverlay.style.opacity = '0';
+            }
+        });
+
+        // 点击视频区域播放/暂停
+        video.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        });
+
+        // 登录表单处理
+        const loginForm = document.getElementById('loginForm');
+        const loading = document.getElementById('loading');
+        const successMessage = document.getElementById('successMessage');
+
+        // 验证码生成和验证
+        let currentCaptcha = '';
+
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return captcha;
+        }
+
+        function updateCaptcha() {
+            currentCaptcha = generateCaptcha();
+            const captchaImage = document.getElementById('captchaImage');
+            captchaImage.textContent = currentCaptcha;
+        }
+
+        // 初始化验证码
+        updateCaptcha();
+
+        // 刷新验证码按钮
+        document.getElementById('refreshCaptcha').addEventListener('click', updateCaptcha);
+
+        // 验证码输入框失去焦点时验证
+        const captchaInput = document.getElementById('captcha');
+        const captchaError = document.getElementById('captchaError');
+        const loginBtn = document.getElementById('loginBtn');
+
+        captchaInput.addEventListener('blur', () => {
+            const inputValue = captchaInput.value.trim();
+            
+            if (inputValue === '') {
+                captchaError.textContent = '请输入验证码';
+                loginBtn.disabled = true;
+                return;
+            }
+
+            if (inputValue.length !== 6) {
+                captchaError.textContent = '验证码长度必须为6位';
+                loginBtn.disabled = true;
+                return;
+            }
+
+            // 不区分大小写比较验证码
+            if (inputValue.toLowerCase() !== currentCaptcha.toLowerCase()) {
+                captchaError.textContent = '验证码错误';
+                loginBtn.disabled = true;
+                return;
+            }
+
+            captchaError.textContent = '';
+            loginBtn.disabled = false;
+        });
+
+        // 添加 Toast 提示函数
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            // 显示动画
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+            }, 100);
+
+            // 2秒后移除
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 2000);
+        }
+
+        // 添加 Toast 样式
+        const toastStyle = document.createElement('style');
+        toastStyle.textContent = `
+            .toast {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 24px;
+                background: #4CAF50;
+                color: white;
+                border-radius: 4px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                z-index: 1000;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: all 0.3s ease;
+            }
+            .toast.error {
+                background: #f44336;
+            }
+            .toast.warning {
+                background: #ff9800;
+            }
+        `;
+        document.head.appendChild(toastStyle);
+
+        // 修改登录表单提交处理
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const captcha = document.getElementById('captcha').value;
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
+            
+            // 重置错误信息
+            usernameError.textContent = '';
+            passwordError.textContent = '';
+            
+            // 验证学号格式
+            if (!username.startsWith('233') || username.length !== 10 || !/^\d{10}$/.test(username)) {
+                usernameError.textContent = '请输入233开头的10位学号';
+                return;
+            }
+            
+            // 验证密码
+            if (password !== '123456') {
+                passwordError.textContent = '密码错误，请输入123456';
+                return;
+            }
+
+            // 不区分大小写比较验证码
+            if (captcha.toLowerCase() !== currentCaptcha.toLowerCase()) {
+                alert('验证码错误');
+                return;
+            }
+
+            // 显示加载动画
+            loading.style.display = 'block';
+            
+            // 模拟登录过程
+            setTimeout(() => {
+                loading.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // 保存登录状态
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', username);
+                
+                // 显示成功消息并跳转到主页
+                showToast('登录成功，即将跳转到主页...', 'success');
+                
+                // 延迟跳转，确保用户看到成功消息
+                setTimeout(() => {
+                    window.location.replace('index.html');
+                }, 1500);
+            }, 1500);
+        });
+
+        // 输入框获得焦点时清除错误信息
+        captchaInput.addEventListener('focus', () => {
+            captchaError.textContent = '';
+        });
+
+        // 页面加载动画
+        window.addEventListener('load', () => {
+            const container = document.querySelector('.login-container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(30px)';
+            container.style.transition = 'all 0.6s ease';
+            
+            setTimeout(() => {
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html> 

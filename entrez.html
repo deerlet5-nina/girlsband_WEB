@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrez搜索 - 生物信息学工具</title>
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/ajax-loader.js"></script>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f5f5f5;
+            --border-color: #e0e0e0;
+            --hover-color: #e85a8f;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-bg: #2d2d2d;
+            --border-color: #404040;
+            --hover-color: #ff6b9c;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Ma Shan Zheng", cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .logo h1 {
+            color: #e85a8f;
+            font-size: 2rem;
+            margin: 0;
+            text-shadow: none;
+            width: 100%;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        nav a {
+            color: #333333;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        nav a:hover {
+            color: #e85a8f;
+            background: rgba(232, 90, 143, 0.1);
+        }
+
+        nav a.active {
+            color: #e85a8f;
+            background: rgba(232, 90, 143, 0.1);
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e85a8f;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #e85a8f, #bd4f8c);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: "Ma Shan Zheng", cursive;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #bd4f8c, #e85a8f);
+        }
+
+        .search-section {
+            margin-bottom: 30px;
+        }
+
+        .search-modes {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .mode-btn {
+            padding: 10px 20px;
+            border: 2px solid #e85a8f;
+            border-radius: 5px;
+            background-color: white;
+            color: #e85a8f;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .mode-btn:hover {
+            background-color: #e85a8f;
+            color: white;
+        }
+
+        .mode-btn.active {
+            background-color: #e85a8f;
+            color: white;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            color: #e85a8f;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid rgba(232, 90, 143, 0.3);
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #e85a8f;
+            box-shadow: 0 0 0 3px rgba(232, 90, 143, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #e85a8f, #bd4f8c);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: "Ma Shan Zheng", cursive;
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #bd4f8c, #e85a8f);
+        }
+
+        .results-section {
+            margin-top: 20px;
+        }
+
+        .results-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .results-list li {
+            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .results-list li.active {
+            display: block;
+        }
+
+        .results-list li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .results-list a {
+            color: #e85a8f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .results-list a:hover {
+            text-decoration: underline;
+        }
+
+        .results-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            background-color: #e85a8f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: #bd4f8c;
+        }
+
+        .nav-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .result-counter {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+            color: #e85a8f;
+            font-size: 2rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: #ff4444;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 68, 68, 0.1);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .article-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+        }
+
+        .article-authors {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+        }
+
+        .article-year {
+            color: #888;
+            font-size: 0.85em;
+            font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+        }
+
+        .article-link {
+            display: inline-block;
+            margin-top: 8px;
+            color: #e85a8f;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+        }
+
+        .article-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .search-modes {
+                flex-direction: column;
+            }
+        }
+
+        /* 页面切换动画 */
+        .page-transition {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .page-transition.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>生物信息学工具</h1>
+        </div>
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="entrez.html" class="active">Entrez搜索</a>
+            <a href="canvas.html">绘图区</a>
+            <a href="about.html">关于我们</a>
+        </nav>
+    </header>
+
+    <main class="page-transition">
+        <div class="container">
+            <div class="header">
+                <h2>Entrez 数据库搜索</h2>
+                <a href="index.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> 返回首页
+                </a>
+            </div>
+
+            <div class="search-section">
+                <div class="search-modes">
+                    <button class="mode-btn active" data-mode="get">GET 模式</button>
+                    <button class="mode-btn" data-mode="post">POST 模式</button>
+                    <button class="mode-btn" data-mode="session">SESSION 模式</button>
+                </div>
+
+                <form id="searchForm" class="search-form">
+                    <div class="form-group">
+                        <label for="database">数据库</label>
+                        <select id="database" name="database" required>
+                            <option value="pubmed">PubMed</option>
+                            <option value="gene">Gene</option>
+                            <option value="protein">Protein</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="term">搜索关键词</label>
+                        <input type="text" id="term" name="term" required placeholder="请输入搜索关键词">
+                    </div>
+                    <button type="submit" class="btn">搜索</button>
+                </form>
+
+                <div id="loading" class="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>正在搜索...</p>
+                </div>
+                <div id="error" class="error-message"></div>
+                <div id="results" class="results-section" style="display: none;">
+                    <h3 style="color: #f903ab;">搜索结果</h3>
+                    <ul id="resultsList" class="results-list"></ul>
+                    <div class="results-navigation">
+                        <button class="nav-btn" id="prevBtn" disabled>
+                            <i class="fas fa-chevron-left"></i> 上一个
+                        </button>
+                        <span class="result-counter" id="resultCounter"></span>
+                        <button class="nav-btn" id="nextBtn" disabled>
+                            下一个 <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // NCBI E-utilities 基础 URL
+        const NCBI_BASE_URL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils';
+
+        // 模拟 SESSION 存储
+        const sessionStorage = {
+            data: {},
+            setItem(key, value) {
+                this.data[key] = value;
+            },
+            getItem(key) {
+                return this.data[key];
+            },
+            removeItem(key) {
+                delete this.data[key];
+            }
+        };
+
+        // 当前搜索模式
+        let currentMode = 'get';
+
+        // 初始化搜索模式按钮
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+            });
+        });
+
+        // 当前搜索结果状态
+        let searchResults = {
+            items: [],
+            currentIndex: 0,
+            totalResults: 0
+        };
+
+        // 获取文章详细信息
+        async function fetchArticleDetails(id, database) {
+            try {
+                const response = await fetch(`${NCBI_BASE_URL}/efetch.fcgi?db=${database}&id=${id}&retmode=xml`);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(text, "text/xml");
+
+                let title = '';
+                let authors = [];
+                let year = '';
+
+                if (database === 'pubmed') {
+                    const article = xmlDoc.querySelector('PubmedArticle');
+                    if (article) {
+                        const articleTitle = article.querySelector('ArticleTitle');
+                        title = articleTitle ? articleTitle.textContent : '';
+
+                        const authorList = article.querySelectorAll('Author');
+                        authors = Array.from(authorList).map(author => {
+                            const lastName = author.querySelector('LastName')?.textContent || '';
+                            const foreName = author.querySelector('ForeName')?.textContent || '';
+                            return `${lastName} ${foreName}`.trim();
+                        });
+
+                        const pubDate = article.querySelector('PubDate');
+                        if (pubDate) {
+                            year = pubDate.querySelector('Year')?.textContent || '';
+                        }
+                    }
+                } else if (database === 'gene') {
+                    const gene = xmlDoc.querySelector('Entrezgene');
+                    if (gene) {
+                        const geneRef = gene.querySelector('Gene-ref');
+                        title = geneRef?.querySelector('Gene-ref_locus')?.textContent || '';
+                        const geneDesc = geneRef?.querySelector('Gene-ref_desc')?.textContent || '';
+                        if (geneDesc) {
+                            title += ` - ${geneDesc}`;
+                        }
+                    }
+                }
+
+                return {
+                    title: title || '无标题',
+                    authors: authors.length > 0 ? authors.join(', ') : '未知作者',
+                    year: year || '未知年份'
+                };
+            } catch (error) {
+                console.error('获取文章详情失败:', error);
+                return {
+                    title: '获取详情失败',
+                    authors: '未知作者',
+                    year: '未知年份'
+                };
+            }
+        }
+
+        // 更新结果显示
+        async function updateResultsDisplay() {
+            const resultsList = document.getElementById('resultsList');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const resultCounter = document.getElementById('resultCounter');
+
+            // 更新按钮状态
+            prevBtn.disabled = searchResults.currentIndex === 0;
+            nextBtn.disabled = searchResults.currentIndex === searchResults.items.length - 1;
+
+            // 更新计数器
+            resultCounter.textContent = `${searchResults.currentIndex + 1} / ${searchResults.items.length}`;
+
+            // 获取当前文章的详细信息
+            const currentItem = searchResults.items[searchResults.currentIndex];
+            const details = await fetchArticleDetails(currentItem.id, currentItem.database);
+
+            // 更新结果显示
+            resultsList.innerHTML = searchResults.items.map((item, index) => `
+                <li class="${index === searchResults.currentIndex ? 'active' : ''}">
+                    <div class="article-title">${index === searchResults.currentIndex ? details.title : ''}</div>
+                    <div class="article-authors">${index === searchResults.currentIndex ? details.authors : ''}</div>
+                    <div class="article-year">${index === searchResults.currentIndex ? details.year : ''}</div>
+                    <a href="https://www.ncbi.nlm.nih.gov/${item.database}/${item.id}" target="_blank" class="article-link">
+                        ${item.database.toUpperCase()} ID: ${item.id}
+                    </a>
+                </li>
+            `).join('');
+        }
+
+        // 初始化导航按钮事件
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (searchResults.currentIndex > 0) {
+                searchResults.currentIndex--;
+                updateResultsDisplay();
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (searchResults.currentIndex < searchResults.items.length - 1) {
+                searchResults.currentIndex++;
+                updateResultsDisplay();
+            }
+        });
+
+        // 搜索表单提交
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const database = document.getElementById('database').value;
+            const term = document.getElementById('term').value;
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const results = document.getElementById('results');
+
+            try {
+                loading.style.display = 'block';
+                error.style.display = 'none';
+                results.style.display = 'none';
+
+                let response;
+                switch (currentMode) {
+                    case 'get':
+                        response = await fetch(`${NCBI_BASE_URL}/esearch.fcgi?db=${database}&term=${encodeURIComponent(term)}&retmode=json&retmax=20`);
+                        break;
+                    case 'post':
+                        response = await fetch(`${NCBI_BASE_URL}/esearch.fcgi`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `db=${database}&term=${encodeURIComponent(term)}&retmode=json&retmax=20`
+                        });
+                        break;
+                    case 'session':
+                        sessionStorage.setItem('searchDatabase', database);
+                        sessionStorage.setItem('searchTerm', term);
+                        response = await fetch(`${NCBI_BASE_URL}/esearch.fcgi?db=${database}&term=${encodeURIComponent(term)}&retmode=json&retmax=20`);
+                        break;
+                }
+
+                const data = await response.json();
+
+                if (data.esearchresult && data.esearchresult.idlist) {
+                    // 更新搜索结果
+                    searchResults = {
+                        items: data.esearchresult.idlist.map(id => ({
+                            id,
+                            database
+                        })),
+                        currentIndex: 0,
+                        totalResults: data.esearchresult.idlist.length
+                    };
+
+                    // 显示结果
+                    results.style.display = 'block';
+                    updateResultsDisplay();
+                } else {
+                    throw new Error('未找到相关结果');
+                }
+            } catch (err) {
+                error.textContent = err.message;
+                error.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+
+        // 主题切换功能
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // 页面切换效果
+        $(document).ready(function() {
+            // 防止页面加载时的闪烁
+            $('body').css('overflow-x', 'hidden');
+            
+            // 添加页面过渡效果
+            $('.page-transition').addClass('active');
+            
+            // 处理导航链接点击
+            $('nav a').click(function(e) {
+                e.preventDefault();
+                const href = $(this).attr('href');
+                
+                // 添加退出动画
+                $('.page-transition').removeClass('active');
+                
+                // 延迟跳转
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300);
+            });
+
+            // 处理返回按钮点击
+            $('.back-btn').click(function(e) {
+                e.preventDefault();
+                const href = $(this).attr('href');
+                
+                // 添加退出动画
+                $('.page-transition').removeClass('active');
+                
+                // 延迟跳转
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html> 

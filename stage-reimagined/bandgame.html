@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乐队搭配游戏 | Stage Reimagined</title>
+    <link rel="stylesheet" href="css/site.css">
+</head>
+<body class="page-game" data-page="game">
+    <div class="site-shell">
+        <header class="site-header">
+            <a class="brand" href="index.html">
+                <strong>Girls Band Stage Reimagined</strong>
+                <span>Band Builder Game</span>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html">首页</a>
+                <a href="bands/k-on.html">轻音少女</a>
+                <a href="bands/bocchi.html">孤独摇滚</a>
+                <a href="bands/mygo.html">MyGO!!!!!</a>
+                <a href="bands/gbc.html">Girls Band Cry</a>
+                <a href="bandgame.html">搭配游戏</a>
+            </nav>
+            <a class="outline-link" href="../bandgame/index.html">旧版游戏</a>
+        </header>
+
+        <main>
+            <section class="game-hero">
+                <span class="eyebrow">Band Builder</span>
+                <h1>把她们重新编成一支你愿意押宝的乐队</h1>
+                <p>旧站里的预算、借钱、特殊组合、详细评估和彩蛋事件，这次都恢复了。区别是现在的界面会更像演出后台的 roster board，而不是旧式表格式布局。</p>
+                <div class="game-stats">
+                    <article class="game-stat">
+                        <span class="section-kicker">Budget</span>
+                        <strong id="budgetDisplay">15 元</strong>
+                    </article>
+                    <article class="game-stat">
+                        <span class="section-kicker">Rules</span>
+                        <strong>主唱 / 吉他 / 贝斯 / 鼓手缺一不可</strong>
+                    </article>
+                    <article class="game-stat">
+                        <span class="section-kicker">Special</span>
+                        <strong>保留借钱、波奇连借和彩蛋复活事件</strong>
+                    </article>
+                </div>
+                <div class="game-actions">
+                    <button class="action-btn secondary" id="borrowButton" type="button">试试借钱</button>
+                    <button class="action-btn secondary" id="soundToggle" type="button">音效开启</button>
+                    <button class="action-btn secondary" id="resetGame" type="button">重新开始</button>
+                    <button class="action-btn" id="evaluateBand" type="button">评估乐队</button>
+                </div>
+                <div class="borrow-banner" id="borrowBanner">
+                    <strong>后台留言</strong>
+                    <p>你有 15 元预算。可以先正常选人，也可以赌一把借钱按钮会不会带来好事。</p>
+                </div>
+            </section>
+
+            <section class="game-layout section-block">
+                <div class="game-panel">
+                    <div class="section-heading">
+                        <div>
+                            <span class="section-kicker">Roster</span>
+                            <h2>候选成员池</h2>
+                        </div>
+                        <p>不同乐队依然保留各自的色彩身份。你可以混编，也可以赌完整原团的高额加成。</p>
+                    </div>
+                    <div class="game-band-grid" id="memberPool"></div>
+                </div>
+
+                <aside class="game-sidebar">
+                    <div class="game-panel">
+                        <div class="section-heading">
+                            <div>
+                                <span class="section-kicker">Selected</span>
+                                <h2>已选阵容</h2>
+                            </div>
+                        </div>
+                        <div class="selected-list" id="selectedList"></div>
+                        <div class="status-check" id="requirementsStatus"></div>
+
+                        <div class="section-heading" style="margin-top: 1.2rem;">
+                            <div>
+                                <span class="section-kicker">Preview</span>
+                                <h2>即时评分</h2>
+                            </div>
+                        </div>
+                        <div class="score-grid-compact">
+                            <article class="score-tile">
+                                <span>技能总分</span>
+                                <strong class="score-value" id="skillScore">0</strong>
+                            </article>
+                            <article class="score-tile">
+                                <span>化学反应</span>
+                                <strong class="score-value" id="chemistryScore">0</strong>
+                            </article>
+                            <article class="score-tile">
+                                <span>组合加成</span>
+                                <strong class="score-value" id="comboScore">0</strong>
+                            </article>
+                            <article class="score-tile">
+                                <span>预估总分</span>
+                                <strong class="score-value" id="totalScore">0</strong>
+                            </article>
+                        </div>
+                        <p class="score-note" id="scoreNote">先凑齐基础位置，再看组合加成会更有意义。</p>
+
+                        <div class="section-heading" style="margin-top: 1.2rem;">
+                            <div>
+                                <span class="section-kicker">Combos</span>
+                                <h2>已触发组合</h2>
+                            </div>
+                        </div>
+                        <div class="combo-list" id="comboList"></div>
+                    </div>
+                </aside>
+            </section>
+
+            <section class="section-block">
+                <div class="section-heading">
+                    <div>
+                        <span class="section-kicker">Evaluation</span>
+                        <h2>详细评估</h2>
+                    </div>
+                    <p>点击“评估乐队”后，这里会展开更完整的分析和建议。</p>
+                </div>
+                <div class="evaluation-detail" id="evaluationDetail"></div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <article class="footer-block">
+                    <h3>这次恢复了什么</h3>
+                    <p>预算限制、借钱事件、波奇连借、祥子彩蛋复活、特殊组合加成、详细评分和建议都重新实现了。</p>
+                </article>
+                <article class="footer-block">
+                    <h3>快速入口</h3>
+                    <div class="footer-links">
+                        <a href="index.html">回到首页</a>
+                        <a href="bands/k-on.html">乐队详情页</a>
+                        <a href="../bandgame/index.html">旧版游戏</a>
+                    </div>
+                </article>
+                <article class="footer-block">
+                    <h3>并行目录</h3>
+                    <p>本页来自 <code>stage-reimagined</code>，和旧版小游戏页面互不覆盖。</p>
+                </article>
+            </div>
+            <div class="footer-bottom">Band Builder Game · Stage Reimagined</div>
+        </footer>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>

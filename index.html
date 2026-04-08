@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Girls Band Animation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        :root {
+            /* Light theme (default) */
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f5f5f5;
+            --header-bg: #ffffff;
+            --footer-bg: #f8f8f8;
+            --border-color: #e0e0e0;
+            --hover-color: #ff8fb1;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --slider-bg: #ffffff;
+            --slider-text: #333333;
+        }
+
+       [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-bg: #2d2d2d;
+            --header-bg: #2d2d2d;
+            --footer-bg: #2d2d2d;
+            --border-color: #404040;
+            --hover-color: #ff6b9c;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --slider-bg: #2d2d2d;
+            --slider-text: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .band-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: rotate(0deg);
+        }
+
+        /* 为每个乐队卡片设置独特的背景色 */
+        .band-card:nth-child(1) {
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.15), rgba(255, 192, 203, 0.25));
+            border-color: rgba(255, 182, 193, 0.3);
+        }
+
+        .band-card:nth-child(2) {
+            background: linear-gradient(135deg, rgba(147, 112, 219, 0.15), rgba(138, 43, 226, 0.25));
+            border-color: rgba(147, 112, 219, 0.3);
+        }
+
+        .band-card:nth-child(3) {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.25));
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .band-card:nth-child(4) {
+            background: linear-gradient(135deg, rgba(70, 130, 180, 0.15), rgba(100, 149, 237, 0.25));
+            border-color: rgba(70, 130, 180, 0.3);
+        }
+
+        /* 暗色主题下的背景色调整 */
+        [data-theme="dark"] .band-card:nth-child(1) {
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.25), rgba(255, 192, 203, 0.35));
+            border-color: rgba(255, 182, 193, 0.4);
+        }
+
+        [data-theme="dark"] .band-card:nth-child(2) {
+            background: linear-gradient(135deg, rgba(147, 112, 219, 0.25), rgba(138, 43, 226, 0.35));
+            border-color: rgba(147, 112, 219, 0.4);
+        }
+
+        [data-theme="dark"] .band-card:nth-child(3) {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 165, 0, 0.35));
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+
+        [data-theme="dark"] .band-card:nth-child(4) {
+            background: linear-gradient(135deg, rgba(70, 130, 180, 0.25), rgba(100, 149, 237, 0.35));
+            border-color: rgba(70, 130, 180, 0.4);
+        }
+
+        .band-card h2 {
+            color: #e85a8f !important;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .band-card p {
+            color: #666 !important;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .band-card .band-songs h4 {
+            font-size: 1.4rem;
+            margin: 15px 0;
+            color: #e85a8f;
+        }
+
+        .band-card .band-songs ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .band-card .band-songs li {
+            font-size: 1.1rem;
+            margin: 8px 0;
+            color: #666;
+        }
+
+        .band-card .btn {
+            font-size: 1.2rem;
+            padding: 12px 25px;
+            margin-top: 15px;
+        }
+
+        /* 悬停效果增强 */
+        .band-card:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .band-card:nth-child(1):hover {
+            box-shadow: 0 10px 20px rgba(255, 182, 193, 0.3);
+        }
+
+        .band-card:nth-child(2):hover {
+            box-shadow: 0 10px 20px rgba(147, 112, 219, 0.3);
+        }
+
+        .band-card:nth-child(3):hover {
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .band-card:nth-child(4):hover {
+            box-shadow: 0 10px 20px rgba(70, 130, 180, 0.3);
+        }
+
+        .band-card.active {
+            transform: rotate(5deg);
+        }
+
+        .band-card.shaking {
+            animation: shake 0.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        .slide-content {
+            background-color: var(--slider-bg);
+            color: var(--slider-text);
+        }
+
+        /* Theme toggle button styles */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #e85a8f;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        .theme-toggle i {
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid #e85a8f;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #bd4f8c;
+        }
+
+        .search-button {
+            padding: 0.8rem 1.5rem;
+            background: #e85a8f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background: #bd4f8c;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: auto;
+            padding: 10px;
+        }
+
+        .welcome-message {
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #e85a8f, #bd4f8c);
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(232, 90, 143, 0.3);
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .login-form h2 {
+            color: #e85a8f;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* 摇晃动画关键帧 */
+        @keyframes shake {
+            0% { transform: rotate(5deg); }
+            25% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+    </style>
+</head>
+<body class="home-page">
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+    <audio id="background-music"></audio>
+    <div class="clock"></div>
+
+    <header>
+        <div class="logo">
+            <h1>Girls Band Animation</h1>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="active">首页</a>
+            <a href="k-on/index.html">轻音少女</a>
+            <a href="bocchi/index.html">孤独摇滚</a>
+            <a href="mygo/index.html">MYGO!!</a>
+            <a href="gbc/index.html">Girls Band Cry</a>
+            <a href="editor.html">内容管理</a>
+            <a href="entrez.html">生物信息学工具</a>
+        </nav>
+        <div id="userInfo" class="user-info" style="display: none;">
+            <span id="welcomeMessage"></span>
+            <a href="#" id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> 注销
+            </a>
+        </div>
+    </header>
+    
+    <main>
+        <section class="hero-showcase">
+            <div class="hero-copy">
+                <p class="hero-kicker">Stage Ready • Bright Emotion • Girls Band Universe</p>
+                <h2>把每一次心动都推上舞台</h2>
+                <p class="hero-summary">保留原有内容框架，用更明艳的色彩、像演出海报一样的层次和更轻快的互动节奏，让整站更贴近少女乐队主题。</p>
+                <div class="hero-actions">
+                    <a href="#bands" class="btn hero-btn">查看乐队阵容</a>
+                    <a href="#music-player-section" class="hero-link">直达今日推荐</a>
+                </div>
+            </div>
+            <div class="hero-panels">
+                <article class="hero-panel">
+                    <span class="hero-panel-label">Main Stage</span>
+                    <strong>4 部作品</strong>
+                    <p>轻音、孤独摇滚、MyGO!!!!!、Girls Band Cry</p>
+                </article>
+                <article class="hero-panel">
+                    <span class="hero-panel-label">Playlist Mood</span>
+                    <strong>即点即听</strong>
+                    <p>保留现有推荐内容，强化播放器氛围和舞台感。</p>
+                </article>
+                <article class="hero-panel">
+                    <span class="hero-panel-label">Live Energy</span>
+                    <strong>更活泼的视觉节拍</strong>
+                    <p>加入亮色渐变、胶片贴纸、悬浮光斑与滚动显现动画。</p>
+                </article>
+            </div>
+        </section>
+        <div id="mainContent">
+            <div id="content-container">
+                <!-- 用户状态栏 -->
+                <div id="user-status-bar">
+                    <div id="welcomeMessage" style="display: none;">
+                        欢迎回来，<span id="usernameDisplay"></span>！
+                    </div>
+                    <div id="loginPrompt" style="display: none;">
+                        <a href="login.html" class="login-btn">
+                            <i class="fas fa-sign-in-alt"></i> 登录享受更多功能
+                        </a>
+                    </div>
+                </div>
+
+                <section class="carousel" data-section-tag="Spotlight">
+                    <div class="slider-container">
+                        <div class="slider">
+                            <div class="slide">
+                                <a href="k-on/index.html">
+                                    <img src="images\k-on.cover.avif" alt="轻音少女">
+                                </a>
+                                <div class="slide-content">
+                                    <h2>轻音少女</h2>
+                                    <span style="vertical-align: top;
+                                    color: #B2B7F2;
+                                    font-size: 36px;
+                                    font-family: 'Times New Roman, serif;
+                                    font-weight: bold;
+                                    text-align: left;
+                                    padding: 10px 10px;
+                                    line-height: 100%'
+                                  ">
+                                        <b>
+                                          <span lang="ja">
+                                            <span style="color:#d3a201;">☆永远的</span>
+                                            <span style="color:#dab500;">放学后</span>
+                                            <span style="color:#eac403;">茶会☆！！！</span>
+                                          </span>
+                                        </b>
+                                        <hr>
+                                        <b>
+                                          <span style="color:#b98f06;">☆永遠の</span>
+                                          <span style="color:#e9c705;">放課後</span>
+                                          <span style="color:#d6b303;">ティータイム！！！☆</span>
+                                        </b>
+                                      </span>
+                                    <a href="k-on/index.html" class="btn">了解更多</a>
+                                </div>
+                            </div>
+                            <div class="slide">
+                                <a href="bocchi/index.html">
+                                    <img src="images\bocchi_cover1.avif" alt="孤独摇滚">
+                                </a>
+                                <div class="slide-content">
+                                    <div class="slide-text">
+                                        <h2>孤独摇滚</h2>
+                                        <span style="vertical-align: top;
+                                        color: #B2B7F2;
+                                        font-size: 36px;
+                                        font-family: 'Times New Roman', serif;
+                                        font-weight: bold;
+                                        text-align: left;
+                                        padding: 10px 10px;
+                                        line-height: 100%">
+                                            <b>
+                                                <span lang="ja">
+                                                    <span style="color: #36c0b9;
+                                                                font-size: 49px;">阴郁</span>
+                                                    <span style="color: #36c0b9;
+                                                                font-size: 30px;">的话就去</span>
+                                                    <span style="color: #36c0b9;
+                                                                font-size: 54px;">玩摇滚。</span>
+                                                </span>
+                                            </b>
+                                        </span>
+                                    </div>
+                                    <a href="bocchi/index.html" class="btn">了解更多</a>
+                                </div>
+                            </div>
+                            <div class="slide">
+                                <a href="mygo/index.html">
+                                    <img src="images\mygo.cover.avif" alt="MYGO!!">
+                                </a>
+                                <div class="slide-content">
+                                    <h2>MYGO!!！</h2>
+                                    <span style="vertical-align: top;
+                                    color: #B2B7F2;
+                                    font-size: 36px;
+                                    font-family: 'Times New Roman, serif;
+                                    font-weight: bold;
+                                    text-align: left;
+                                    padding: 10px 10px;
+                                    line-height: 100%'
+                                  ">
+                                        <b>
+                                          <span lang="ja">
+                                            <span style="color:#7cc2ed;">迷子、</span>
+                                            <span style="color:#7cc2ed;">迷子</span>
+                                            <span style="color:#7cc2ed;">進め。</span>
+                                          </span>
+                                        </b>
+                                        <hr>
+                                        <b>
+                                          <span style="color:#7cc2ed;">不畏迷茫，</span>
+                                          <span style="color:#7cc2ed;">迷茫着也要</span>
+                                          <span style="color:#7cc2ed;">砥砺前行。</span>
+                                        </b>
+                                      </span>
+                                    <a href="mygo/index.html" class="btn">了解更多</a>
+                                </div>
+                            </div>
+                            <div class="slide">
+                                <a href="gbc/index.html">
+                                    <img src="images\gbc_cover1.avif" alt="Girls Band Cry">
+                                </a>
+                                <div class="slide-content">
+                                    <h2>Girls Band Cry</h2>
+                                    <span style="
+                                    vertical-align: top;
+                                    color: #B2B7F2;
+                                    font-size: 36px;
+                                    font-family: 'Times New Roman', serif;
+                                    font-weight: bold;
+                                    text-align: left;
+                                    padding: 10px 10px;
+                                    line-height: 100%;
+                                  ">
+                                  <b>
+                                    <span lang="ja">
+                                        <span style="color:#ff4235;">最摇滚，</span>
+                                          <span style="color:#fa5f43;">最乐队</span>
+                                          <span style="color:#ff786b;">最浪漫</span>
+                                    </span>
+                                        </b>
+                                        <hr>
+                                        <b>
+                                          <div style="color:#ff3b31;text-align: center;">向世界竖起小指</div>
+                                        </b>
+                                        </span>
+                                    <a href="gbc/index.html" class="btn">了解更多</a>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </section>
+                
+                <section class="featured-bands" data-section-tag="Bands">
+                    <h2>少女乐队</h2>
+                    <div id="bands">
+                        <div class="band-card">
+                            <h2>轻音少女</h2>
+                        <table>
+                            <tr>
+                            <div class="band-preview">
+                                <a href="k-on/index.html">
+                                    <img src="images\k-on_bilinili.webp" alt="轻音少女">
+                                </a>
+                                <div class="band-desc">
+                                    <p>《轻音少女》讲述了樱丘高中轻音部的故事。主角平泽唯在机缘巧合下加入了轻音部，与其他成员一起组建了"放学后茶会"乐队。故事展现了她们在音乐和日常生活中的点点滴滴。</p>
+                            </tr>
+                                    <div class="band-songs">
+                                        <h4>代表歌曲</h4>
+                                        <ul>
+                                            <li>《ふわふわ時間》</li>
+                                            <li>《天使にふれたよ!》</li>
+                                            <li>《Don't say "lazy"》</li>
+                                        </ul>
+                                    </div>
+                                    <a href="k-on/index.html" class="btn">查看详情</a>
+                                </div>
+                            </div>
+                        </table>
+                        </div>
+
+                        <div class="band-card">
+                            <h2>孤独摇滚</h2>
+                            <table>
+                                <tr>
+                            <div class="band-preview">
+                                <a href="bocchi/index.html">
+                                    <img src="images\bocchi_bilibili.webp" alt="孤独摇滚">
+                                </a>
+                                <div class="band-desc">
+                                    <p>《孤独摇滚》讲述了社恐少女后藤一里（波奇）的成长故事。在机缘巧合下，她加入了"结束乐队"，开始了自己的音乐之旅。故事展现了她在音乐和人际交往中的成长。</p>
+                                </tr>    
+                                    <div class="band-songs">
+                                          <h4>代表歌曲</h4>
+                                        <ul>
+                                            <li>《青春コンプレックス》</li>
+                                            <li>《ギターと孤独と蒼い惑星》</li>
+                                            <li>《星座になれたら》</li>
+                                        </ul>
+                                    </div>
+                                    <a href="bocchi/index.html" class="btn">查看详情</a>
+                                </div>
+                            </div>
+                            </table>
+                        </div>
+                        <div class="band-card">
+                            <h2>MYGO!!</h2>
+                            <table>
+                                <tr>
+                            <div class="band-preview">
+                                <a href="mygo/index.html">
+                                    <img src="images\mygo_bilibili.webp" alt="MYGO!!">
+                                </a>
+                                <div class="band-desc">
+                                    <p>　"你能，和我组一辈子乐队吗？"高一的春末。羽丘女子学园里的学生基本上都组好了乐队，推迟入学的爱音也在为了能尽快融入班级而急忙寻找乐队成员。在这时候，知道"羽丘的小怪人"灯还没组乐队之后，爱音不由自主地向她搭话……"。</p>
+                                </tr>    
+                                    <div class="band-songs">
+                                        <h4>代表歌曲</h4>
+                                        <ul>
+                                            <li>《春日影》</li>
+                                            <li>《迷星叫》</li>
+                                            <li>《栞》</li>
+                                        </ul>
+                                    </div>
+                                    <a href="mygo/index.html" class="btn">查看详情</a>
+                                </div>
+                            </div>
+                            </table>
+                        </div>
+                            
+
+                        <div class="band-card">
+                            <h2>Girls Band Cry</h2>
+                            <table>
+                                <tr>
+                            <div class="band-preview">
+                                <a href="gbc/index.html">
+                                    <img src="images\gbc_bilibili.webp" alt="Girls Band Cry">
+                                </a>
+                                <div class="band-desc">
+                                    <p>　高中二年级，辍学独自在东京上补习班并设定了上大学的目标的井芹仁菜，偶然机会下遇到了高中时喜爱的乐队主唱河源木桃香。各自带着伤痕的少女们，簇拥在一起取暖，向着个糟糕的世界竖起小指。也因此，我们歌唱。</p>
+                                </tr>     
+                                    <div class="band-songs">
+                                        <h4>代表歌曲</h4>
+                                        <ul>
+                                            <li>《空の箱》</li>
+                                            <li>《運命に賭けたい論理》</li>
+                                            <li>《誰にもなれない私だから》</li>
+                                        </ul>
+                                    </div>
+                                    <a href="gbc/index.html" class="btn">查看详情</a>
+                                </div>
+                            </div>
+                        </div>
+                            </table>
+                    </div>
+                </section>
+                
+                <section class="music-player" id="music-player-section" data-section-tag="Playlist">
+                    <h2>今日推荐</h2>
+                    <div class="player-container">
+                        <div class="now-playing">
+                            <h3>当前无播放</h3>
+                            <p>选择一首歌曲开始播放</p>
+                        </div>
+                        
+                        <div class="player-main">
+                            <div class="vinyl-container">
+                                <div class="vinyl-disc">
+                                    <img src="images/k-on_bilinili.webp" alt="当前播放乐队" class="vinyl-image">
+                                </div>
+                            </div>
+                            
+                            <div class="controls">
+                                <button class="control-btn prev-song" title="上一首"><i class="fas fa-step-backward"></i></button>
+                                <button class="control-btn play-pause" title="播放/暂停"><i class="fas fa-play"></i></button>
+                                <button class="control-btn next-song" title="下一首"><i class="fas fa-step-forward"></i></button>
+                                <button class="control-btn like-btn" title="喜欢"><i class="far fa-heart"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar"></div>
+                        </div>
+                        
+                        <div class="playlist">
+                            <div class="music-item" data-src="music\放課後ティータイム - 天使にふれたよ!.mp3">
+                                <div class="music-image">
+                                    <img src="images/k-on_bilinili.webp" alt="轻音少女">
+                                </div>
+                                <div class="music-info">
+                                    <h3>天使にふれたよ!</h3>
+                                    <p>轻音少女</p>
+                                </div>
+                            </div>
+                            <div class="music-item" data-src="music\結束バンド - 青春コンプレックス.mp3">
+                                <div class="music-image">
+                                    <img src="images/bocchi_bilibili.webp" alt="孤独摇滚">
+                                </div>
+                                <div class="music-info">
+                                    <h3>青春コンプレックス</h3>
+                                    <p>孤独摇滚</p>
+                                </div>
+                            </div>
+                            <div class="music-item" data-src="music\MyGO!!!!! - 春日影 (MyGO!!!!! ver.).mp3">
+                                <div class="music-image">
+                                    <img src="images/mygo_bilibili.webp" alt="MYGO!!">
+                                </div>
+                                <div class="music-info">
+                                    <h3>春日影 (MyGO!!!!! ver.)</h3>
+                                    <p>MYGO!!</p>
+                                </div>
+                            </div>
+                            <div class="music-item" data-src="music\トゲナシトゲアリ - 空の箱 (井芹仁菜、河原木桃香).mp3">
+                                <div class="music-image">
+                                    <img src="images/gbc_bilibili.webp" alt="Girls Band Cry">
+                                </div>
+                                <div class="music-info">
+                                    <h3>空之箱</h3>
+                                    <p>Girls Band Cry</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </section>
+                
+                <section class="game-promo" data-section-tag="Special">
+                        <h2><a href="bandgame/index.html">少女乐队搭配游戏</a></h2>
+                    <div class="game-promo-content">
+                        <div class="game-promo-image">
+                                <a href="bandgame/index.html">
+                                <img src="images/k-on.cover.avif" alt="乐队搭配游戏">
+                            </a>
+                        </div>
+                        <div class="game-promo-details">
+                            <h3>组建你的梦想乐队！</h3>
+                            <p class="game-intro">你有15元预算，从四支动画乐队的成员中挑选最佳搭配，打造属于你的梦想乐队！</p>
+                            <p class="game-features">挑战特殊组合，解锁隐藏加成，看看你能得多少分！</p>
+                                <a href="bandgame/index.html" class="game-promo-btn">开始游戏</a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+        </div>
+    </main>
+
+    <section class="search-container">
+        <form class="search-form" action="https://www.baidu.com/s" method="get" target="_blank">
+            <input type="text" name="wd" class="search-input" placeholder="请输入搜索关键词...">
+            <button type="submit" class="search-button">
+                <i class="fas fa-search"></i> 搜索
+            </button>
+        </form>
+        <div id="ncbiSearch" style="display: none;">
+            <a href="entrez.html" class="ncbi-btn">
+                <i class="fas fa-search"></i> NCBI 数据库搜索
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>关于本站</h3>
+                <p>所谓乐队啊，就是一群有一堆想说的话的人聚在了一起</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="k-on/index.html">轻音少女</a></li>
+                    <li><a href="bocchi/index.html">孤独摇滚</a></li>
+                    <li><a href="mygo/index.html">MYGO!!</a></li>
+                    <li><a href="gbc/index.html">Girls Band Cry</a></li>
+                    <li><a href="bandgame/index.html">乐队搭配游戏</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>Email: 2984065260@qq.com</p>
+                <div class="social-links">
+                    <a href="https://www.bilibili.com/bangumi/play/ep1193810?spm_id_from=333.337.0.0&from_spmid=666.25.episode.0"><i class="fab fa-bilibili"></i></a>
+                    <a href="https://www.bilibili.com/bangumi/play/ss1172?spm_id_from=333.337.0.0"><i class="fab fa-weibo"></i></a>
+                    <a href="https://www.bilibili.com/bangumi/play/ss73077?spm_id_from=333.337.0.0"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.bilibili.com/bangumi/play/ss43164?spm_id_from=333.337.0.0"><i class="fab fa-bilibili"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Girls Band Animation 版权所有</p>
+        </div>
+    </footer>
+    
+    <script src="js/script.js"></script>
+    <script src="js/home-enhance.js"></script>
+    <script src="js/clock.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/music-player.js"></script>
+    <script>
+        // 检查登录状态并更新界面
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const username = localStorage.getItem('username');
+            const userInfo = document.getElementById('userInfo');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            const usernameDisplay = document.getElementById('usernameDisplay');
+            const loginPrompt = document.getElementById('loginPrompt');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const contentManagementLinks = document.querySelectorAll('a[href="editor.html"]');
+
+            if (isLoggedIn && username) {
+                // 用户已登录
+                userInfo.style.display = 'flex';
+                welcomeMessage.style.display = 'block';
+                usernameDisplay.textContent = username;
+                loginPrompt.style.display = 'none';
+                if (logoutBtn) {
+                    logoutBtn.style.display = 'block';
+                }
+                // 启用内容管理链接
+                contentManagementLinks.forEach(link => {
+                    link.style.pointerEvents = 'auto';
+                    link.style.opacity = '1';
+                });
+            } else {
+                // 用户未登录
+                userInfo.style.display = 'none';
+                welcomeMessage.style.display = 'none';
+                loginPrompt.style.display = 'block';
+                if (logoutBtn) {
+                    logoutBtn.style.display = 'none';
+                }
+                // 禁用内容管理链接
+                contentManagementLinks.forEach(link => {
+                    link.style.pointerEvents = 'none';
+                    link.style.opacity = '0.5';
+                });
+            }
+        }
+
+        // 页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
+        // 退出登录功能
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('username');
+            checkLoginStatus();
+        });
+
+        // 内容管理链接点击事件
+        document.querySelectorAll('a[href="editor.html"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                if (!isLoggedIn) {
+                    e.preventDefault();
+                    // 创建登录提示框
+                    const loginPrompt = document.createElement('div');
+                    loginPrompt.className = 'login-prompt-modal';
+                    loginPrompt.innerHTML = `
+                        <div class="login-prompt-content">
+                            <h3>需要登录</h3>
+                            <p>请登录以使用更多功能</p>
+                            <div class="login-prompt-buttons">
+                                <a href="login.html" class="login-btn">
+                                    <i class="fas fa-sign-in-alt"></i> 前往登录
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(loginPrompt);
+
+                    // 添加样式
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        .login-prompt-modal {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background: rgba(0, 0, 0, 0.5);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            z-index: 1000;
+                        }
+                        .login-prompt-content {
+                            background: var(--card-bg);
+                            padding: 2rem;
+                            border-radius: 12px;
+                            box-shadow: 0 4px 6px var(--shadow-color);
+                            text-align: center;
+                        }
+                        .login-prompt-content h3 {
+                            color: #e85a8f;
+                            margin-bottom: 1rem;
+                        }
+                        .login-prompt-content p {
+                            color: var(--text-color);
+                            margin-bottom: 1.5rem;
+                        }
+                        .login-prompt-buttons {
+                            display: flex;
+                            gap: 1rem;
+                            justify-content: center;
+                        }
+                        .login-btn {
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            transition: background-color 0.3s;
+                            font-size: 1rem;
+                            border: none;
+                            text-decoration: none;
+                            display: inline-block;
+                            background-color: #e85a8f;
+                            color: white;
+                        }
+                        .login-btn:hover {
+                            background-color: #bd4f8c;
+                        }
+                    `;
+                    document.head.appendChild(style);
+
+                    // 点击背景关闭提示框
+                    loginPrompt.addEventListener('click', function(e) {
+                        if (e.target === loginPrompt) {
+                            document.body.removeChild(loginPrompt);
+                        }
+                    });
+                }
+            });
+        });
+
+        // 主题切换功能
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        // 其他原有的 JavaScript 代码
+        // 验证码生成和验证
+        let currentCaptcha = '';
+
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return captcha;
+        }
+
+        function updateCaptcha() {
+            currentCaptcha = generateCaptcha();
+            const captchaImage = document.getElementById('captchaImage');
+            captchaImage.textContent = currentCaptcha;
+        }
+
+        // 初始化验证码
+        updateCaptcha();
+
+        // 刷新验证码按钮
+        document.getElementById('refreshCaptcha').addEventListener('click', updateCaptcha);
+
+        // 验证码输入框失去焦点时验证
+        const captchaInput = document.getElementById('captcha');
+        const captchaError = document.getElementById('captchaError');
+        const loginBtn = document.getElementById('loginBtn');
+
+        captchaInput.addEventListener('blur', () => {
+            const inputValue = captchaInput.value.trim();
+            
+            if (inputValue === '') {
+                captchaError.textContent = '请输入验证码';
+                loginBtn.disabled = true;
+                return;
+            }
+
+            if (inputValue.length !== 6) {
+                captchaError.textContent = '验证码长度必须为6位';
+                loginBtn.disabled = true;
+                return;
+            }
+
+            if (inputValue !== currentCaptcha) {
+                captchaError.textContent = '验证码错误';
+                loginBtn.disabled = true;
+                return;
+            }
+
+            captchaError.textContent = '';
+            loginBtn.disabled = false;
+        });
+
+        // 登录表单提交
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const captcha = document.getElementById('captcha').value;
+            
+            if (!username || !password) {
+                alert('请输入用户名和密码');
+                return;
+            }
+
+            if (captcha !== currentCaptcha) {
+                alert('验证码错误');
+                return;
+            }
+
+            // 模拟用户验证（这里可以添加实际的用户验证逻辑）
+            if (username.length === 8 && /^\d{8}$/.test(username)) {
+                // 保存登录状态
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', username);
+                
+                // 更新页面状态
+                checkLoginStatus();
+                
+                // 清空表单
+                this.reset();
+                updateCaptcha();
+            } else {
+                alert('请输入正确的学号（8位数字）');
+            }
+        });
+
+        // 修复乐队卡片点击效果
+        document.querySelectorAll('.band-card').forEach(card => {
+            let isActive = false;
+            
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (!isActive) {
+                    // 第一次点击，添加倾斜效果
+                    this.classList.add('active');
+                    isActive = true;
+                } else {
+                    // 后续点击，添加摇晃动画
+                    this.classList.remove('active');
+                    this.classList.add('shaking');
+                    
+                    // 动画结束后重置状态
+                    this.addEventListener('animationend', function() {
+                        this.classList.remove('shaking');
+                        this.style.transform = 'rotate(0deg)';
+                        isActive = false;
+                    }, { once: true });
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MYGO!! - Girls Band Animation</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/band-page.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        :root {
+            /* MYGO 青蓝色主题 (Light) */
+            --bg-color: #e8f4fd;
+            --text-color: #1a365d;
+            --card-bg: linear-gradient(145deg, #bee3f8, #90cdf4);
+            --header-bg: linear-gradient(135deg, #0ea5e9, #0284c7, #0369a1);
+            --footer-bg: linear-gradient(135deg, #e6f3ff, #bee3f8);
+            --border-color: #0ea5e9;
+            --hover-color: #0369a1;
+            --shadow-color: rgba(14, 165, 233, 0.4);
+            --accent-color: #0284c7;
+            --secondary-color: #0ea5e9;
+            --tech-color: #1e40af;
+        }
+
+        [data-theme="dark"] {
+            /* MYGO 青蓝色主题 (Dark) */
+            --bg-color: #1a202c;
+            --text-color: #e2e8f0;
+            --card-bg: #2d3748;
+            --header-bg: linear-gradient(135deg, #2c5282, #3182ce);
+            --footer-bg: #2d3748;
+            --border-color: #4a5568;
+            --hover-color: #63b3ed;
+            --shadow-color: rgba(74, 144, 226, 0.3);
+            --accent-color: #4299e1;
+            --secondary-color: #3182ce;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            background: var(--header-bg);
+            border-bottom: 2px solid var(--accent-color);
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        header .logo h1 {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(14, 165, 233, 0.8);
+            font-family: "Ma Shan Zheng", cursive;
+            position: relative;
+            animation: digitalGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes digitalGlow {
+            0% { text-shadow: 0 0 10px rgba(14, 165, 233, 0.8); }
+            100% { text-shadow: 0 0 20px rgba(14, 165, 233, 1), 0 0 30px rgba(14, 165, 233, 0.5); }
+        }
+
+        header .logo h1::after {
+            content: '⚡ 少女们的爱恨纠葛 ⚡';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.32em;
+            color: var(--tech-color);
+            white-space: nowrap;
+            font-family: 'Courier New', monospace;
+            z-index: 10;
+        }
+
+        header {
+            padding-bottom: 60px;
+            margin-bottom: 20px;
+        }
+
+        header nav {
+            margin-top: 15px;
+        }
+
+        main {
+            margin-top: 20px;
+        }
+
+        .member-card, .fan-work-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 12px 30px var(--shadow-color);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .member-card::before, .fan-work-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.3), transparent);
+            animation: scan 3s infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .member-card::after, .fan-work-card::after {
+            content: '⚡';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            animation: electric 1s ease-in-out infinite;
+        }
+
+        @keyframes electric {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* 数字雨效果 */
+        body::before {
+            content: '01010101 11001100 10101010';
+            position: fixed;
+            top: -50px;
+            left: 0;
+            width: 100%;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            opacity: 0.1;
+            animation: digitalRain 20s linear infinite;
+            z-index: -1;
+            white-space: nowrap;
+        }
+
+        @keyframes digitalRain {
+            0% { transform: translateY(-50px); }
+            100% { transform: translateY(100vh); }
+        }
+
+        /* 科技感网格背景 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(14, 165, 233, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14, 165, 233, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* 页面特定样式 */
+        .band-header {
+            height: 400px;
+            background-image: url('../images/mygo.cover.avif');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .band-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        
+        .band-header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        
+        .band-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .band-intro {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .band-intro h2 {
+            color: #e85a8f;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .band-intro p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        /* 故事链接样式 */
+        .story-link {
+            display: inline-block !important;
+            margin: 1rem 0 !important;
+            padding: 0.8rem 1.5rem !important;
+            color: #ff8fb1 !important;
+            font-size: 1.2rem !important;
+            font-weight: 800 !important;
+            text-decoration: none !important;
+            border: 2px solid #ff8fb1 !important;
+            border-radius: 25px !important;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            position: relative !important;
+            overflow: hidden !important;
+            font-family: "Ma Shan Zheng", cursive !important;
+            letter-spacing: 1.5px !important;
+            text-shadow: 2px 2px 4px rgba(255, 143, 177, 0.3) !important;
+            background: linear-gradient(45deg, rgba(255, 143, 177, 0.1), rgba(255, 255, 255, 0.2)) !important;
+            box-shadow: 0 4px 15px rgba(255, 143, 177, 0.1) !important;
+            z-index: 2 !important;
+        }
+
+        .story-link:hover {
+            background: linear-gradient(45deg, #ff8fb1, #ffb6c1) !important;
+            color: white !important;
+            transform: translateY(-5px) scale(1.08) !important;
+            box-shadow: 0 10px 25px rgba(255, 143, 177, 0.4) !important;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3) !important;
+            border-color: transparent !important;
+            letter-spacing: 2px !important;
+        }
+
+        .story-link::before {
+            content: '' !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            width: 0 !important;
+            height: 0 !important;
+            background: rgba(255, 255, 255, 0.3) !important;
+            border-radius: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            transition: width 0.8s ease, height 0.8s ease !important;
+            z-index: -1 !important;
+        }
+
+        .story-link:hover::before {
+            width: 400px !important;
+            height: 400px !important;
+        }
+
+        .story-link::after {
+            content: '' !important;
+            position: absolute !important;
+            top: -2px !important;
+            left: -2px !important;
+            right: -2px !important;
+            bottom: -2px !important;
+            background: linear-gradient(45deg, #ff8fb1, #ffb6c1, #ff8fb1) !important;
+            border-radius: 25px !important;
+            z-index: -2 !important;
+            opacity: 0 !important;
+            transition: opacity 0.5s ease !important;
+            background-size: 200% 200% !important;
+        }
+
+        .story-link:hover::after {
+            opacity: 1 !important;
+            animation: borderRotate 3s linear infinite !important;
+        }
+
+        @keyframes borderRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .story-link:active {
+            transform: translateY(-2px) scale(0.95) !important;
+            box-shadow: 0 5px 15px rgba(255, 143, 177, 0.2) !important;
+            transition: all 0.2s ease !important;
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 4px 15px rgba(255, 143, 177, 0.1); }
+            50% { box-shadow: 0 4px 25px rgba(255, 143, 177, 0.3); }
+            100% { box-shadow: 0 4px 15px rgba(255, 143, 177, 0.1); }
+        }
+
+        .story-link {
+            animation: glowPulse 2s infinite !important;
+        }
+
+        /* Theme toggle button styles */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle i {
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .member-image {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .member-image a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .member-card:hover .member-image img {
+            transform: scale(1.05);
+        }
+
+        .fan-work-image {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .fan-work-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .fan-work-image a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .fan-work-card:hover .fan-work-image img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="subpage">
+    <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <i class="fas fa-moon"></i>
+    </button>
+    <audio id="background-music"></audio>
+    <div class="clock"></div>
+
+    <header>
+        <div class="logo">
+            <h1>MYGO!!</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../k-on/index.html">轻音少女</a></li>
+                <li><a href="../bocchi/index.html">孤独摇滚</a></li>
+                <li><a href="index.html" class="active">MYGO!!</a></li>
+                <li><a href="../gbc/index.html">Girls Band Cry</a></li>
+                <li><a href="../bandgame/index.html">乐队搭配游戏</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="band-intro">
+            <div class="band-banner">
+                <img src="../images/mygo.cover.avif" alt="MYGO!!">
+                <div class="band-info">
+                    <h2 style="color: #e85a8f; font-size: 1.6rem; margin-bottom: 0.5rem;">MYGO!!!!!</h2>
+                    <a href="https://www.bilibili.com/bangumi/play/ss73077?spm_id_from=333.337.0.0" target="_blank" class="story-link">她们的故事</a>
+                    <p class="band-desc" style="margin-top: 0.5rem;">偶然与算计中诞生的乐队，充满各自缺陷的少女们，彼此依赖的家园</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="members">
+            <h2>乐队成员</h2>
+            <div class="members-grid">
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="../images/mygo_tomori.cover.png" alt="高松灯">
+                        <a href="https://mzh.moegirl.org.cn/%E9%AB%98%E6%9D%BE%E7%81%AF" target="_blank"></a>
+                    </div>
+                    <div class="member-info">
+                        <h3>高松灯</h3>
+                        <p class="role">主唱</p>
+                        <p class="desc">虽然自认不是那么擅长唱歌，但仍会努力去唱。
+                            由灯写在笔记本上作词，之后立希负责作曲。
+                            对成员的评价：乐奈有实力，爽世待人温柔，爱音正一同努力着立希：那我呢？。
+                            容易感到寂寞，常感受着孤独。
+                            姓氏「高松」来自东京都丰岛区高松町。</p>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="../images/mygo_anon.cover.jpg" alt="千早爱音">
+                        <a href="https://mzh.moegirl.org.cn/%E5%8D%83%E6%97%A9%E7%88%B1%E9%9F%B3" target="_blank"></a>
+                    </div>
+                    <div class="member-info">
+                        <h3>千早爱音</h3>
+                        <p class="role">吉他手</p>
+                        <p class="desc">昵称是爱音或者爱音酱。
+                            即使为了Live而进行的练习都很辛苦，爱音还是很努力去克服困难。
+                            觉得立希很唠叨。
+                            姓氏「千早」来自东京都丰岛区千早町。</p>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="../images/mygo_rana.cover.jpg" alt="要乐奈">
+                        <a href="https://mzh.moegirl.org.cn/%E8%A6%81%E4%B9%90%E5%A5%88"></a>
+                    </div>
+                    <div class="member-info">
+                        <h3>要乐奈</h3>
+                        <p class="role">吉他手</p>
+                        <p class="desc">因为觉得很有趣所以就加入了乐队。
+                            对猫很有兴趣。
+                            姓氏「要」来自东京都丰岛区要町。</p>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="../images/mygo_taki.cover.jpg" alt="椎名立希">
+                        <a href="https://mzh.moegirl.org.cn/%E6%A4%8E%E5%90%8D%E7%AB%8B%E5%B8%8C" target="_blank"></a>
+                    </div>
+                    <div class="member-info">
+                        <h3>椎名立希</h3>
+                        <p class="role">鼓手</p>
+                        <p class="desc">同时也负责作曲，在拿到灯的歌词以后，创作出切合她世界观的歌曲。
+                            觉得灯的歌声很好听，歌词也很不错，LIVE也真的很棒。却不肯承认这一点。
+                            姓氏「椎名」来自东京都丰岛区椎名地区（旧椎名町，在今南长崎町和目白町）。</p>
+                    </div>
+                </div>
+
+                <div class="member-card">                    
+                    <div class="member-image">
+                        <img src="../images/mygo_soyo.cover.jpg" alt="长崎素世">
+                        <a href="https://mzh.moegirl.org.cn/%E9%95%BF%E5%B4%8E%E7%88%BD%E4%B8%96"></a>
+                    </div>
+                    <div class="member-info">
+                        <h3>长崎素世</h3>
+                        <p class="role">贝斯手</p>
+                        <p class="desc">和才刚刚开始组乐队还没多久的大家一起快乐的努力着。
+                            对于被灯说自己很温柔而感到很高兴。
+                            姓氏「长崎」来自东京都丰岛区长崎町。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="music">
+            <h2>代表歌曲</h2>
+            <div class="music-list">
+                <div class="music-item">
+                    <div class="music-info">
+                        <h3>春日影</h3>
+                        <p>作词：高松灯 / 作曲：丰川祥子</p>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                            <img src="../images/mygo-spring.png" alt="" width="300" height="300">
+                            </td>
+                            <td>
+                                <p style="font-family: 'Indie Flower', cursive; font-size: 35px; color: #bd2807; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); line-height: 1.5; letter-spacing: 1px;">
+                                  旧人的歌新人奏。留在眼前的，恍恍惚惚见不着；远在天边的，渐渐明如天上月。                               </p>
+                            </td>
+                        </tr>
+                        </table>
+                    <audio controls>
+                        <source src="../music/MyGO!!!!! - 春日影 (MyGO!!!!! ver.).mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="music-item">
+                    <div class="music-info">
+                        <h3>迷星叫</h3>
+                        <p>作词：高松灯 / 作曲：椎名立希</p>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                            <img src="../images/mygo_shout.webp" alt="" width="300" height="300">
+                            </td>
+                            <td>
+                                <p style="font-family: 'Indie Flower', cursive; font-size: 35px; color: #bd2807; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); line-height: 1.5; letter-spacing: 1px;">
+                                    夜空中闪烁光芒 无依无靠的星尘
+                                    在踌躇之中失散
+                                    啊啊 那颗彷徨的星儿就是我啊
+                                    成为我自己                               </p>
+                            </td>
+                        </tr>
+                        </table>
+                    <audio controls>
+                        <source src="../music/MyGO!!!!! - 迷星叫.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="music-item">
+                    <div class="music-info">
+                        <h3>栞</h3>
+                        <p>作词：高松灯 / 作曲：椎名立希</p>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                            <img src="../images/mygo_ed.png" alt="" width="300" height="300">
+                            </td>
+                            <td>
+                                <p style="font-family: 'Indie Flower', cursive; font-size: 35px; color: #bd2807; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); line-height: 1.5; letter-spacing: 1px;">
+                                  mygo的ed,'普通和理所当然是什么呢？',又看一集（悲喜交加）。
+                                </p>
+                            </td>
+                        </tr>
+                        </table>
+                    <audio controls>
+                        <source src="../music/MyGO!!!!! - 栞（TV Size）.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </section>
+
+        <section class="fan-works">
+            <h2>二创作品</h2>
+            <div class="fan-works-grid">
+                <div class="fan-work-card">
+                    <div class="fan-work-image">
+                        <a href="https://www.bilibili.com/video/BV1KTNQeZEbJ/?spm_id_from=333.337.search-card.all.click" target="_blank" rel="noopener noreferrer">
+                            <img src="../images/mygo_work(1).png" alt="丰川祥子干了哪些坏事">
+                            <a href="https://www.bilibili.com/video/BV1KTNQeZEbJ/?spm_id_from=333.337.search-card.all.click" target="_blank" rel="noopener noreferrer"></a>
+                    </div>
+                    <div class="fan-work-info">
+                            <h3>丰川祥子干了哪些坏事</h3>
+                            <p>播放量：77w+</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="fan-work-card">
+                    <div class="fan-work-image">
+                        <a href="https://www.bilibili.com/video/BV1odwVefE8U?spm_id_from=333.788.recommend_more_video.0&vd_source=6f76f46bfcf4a345c16ca214647c5e67" target="_blank" rel="noopener noreferrer">
+                            <img src="../images/mygo_work(2).png" alt="【MyGO/素世】坏心思的神明，给我带来了禮物。">
+                            <a href="https://www.bilibili.com/video/BV1odwVefE8U?spm_id_from=333.788.recommend_more_video.0&vd_source=6f76f46bfcf4a345c16ca214647c5e67" target="_blank" rel="noopener noreferrer"></a>
+                    </div>
+                    <div class="fan-work-info">
+                            <h3>【MyGO/素世】坏心思的神明，给我带来了禮物。</h3>
+                            <p>播放量：170w+</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="fan-work-card">
+                    <div class="fan-work-image">
+                        <a href="https://www.bilibili.com/video/BV1Ax4y1Y7et/?spm_id_from=333.337.search-card.all.click&vd_source=6f76f46bfcf4a345c16ca214647c5e67" target="_blank" rel="noopener noreferrer">
+                            <img src="../images/mygo_work(3).png" alt="在卡拉ok唱《素颜》的三人">
+                            <a href="https://www.bilibili.com/video/BV1Ax4y1Y7et/?spm_id_from=333.337.search-card.all.click&vd_source=6f76f46bfcf4a345c16ca214647c5e67" target="_blank" rel="noopener noreferrer"></a>
+                    </div>
+                    <div class="fan-work-info">
+                            <h3>在卡拉ok唱《素颜》的三人</h3>
+                            <p>播放量：435w+</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="fan-work-card more-info">
+                    <div class="fan-work-info">
+                        <a href="https://search.bilibili.com/all?vt=01302673&keyword=MYGO&from_source=webtop_search&spm_id_from=333.1007&search_source=5" target="_blank" rel="noopener noreferrer">
+                            <h3>更多信息</h3>
+                            <p>点击查看更多MYGO!!相关内容</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>关于本站</h3>
+                <p>所谓乐队啊，就是一群有一堆想说的话的人聚在了一起</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <ul>
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="../k-on/index.html">轻音少女</a></li>
+                    <li><a href="../bocchi/index.html">孤独摇滚</a></li>
+                    <li><a href="index.html">MYGO!!</a></li>
+                    <li><a href="../gbc/index.html">Girls Band Cry</a></li>
+                    <li><a href="../bandgame/index.html">乐队搭配游戏</a></li>
+                    <li><a href="../canvas.html">绘图区</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>Email: 2984065260@qq.com</p>
+                <div class="social-links">
+                    <a href="https://www.bilibili.com/bangumi/play/ep1193810?spm_id_from=333.337.0.0&from_spmid=666.25.episode.0"><i class="fab fa-bilibili"></i></a>
+                    <a href="https://www.bilibili.com/bangumi/play/ss1172?spm_id_from=333.337.0.0"><i class="fab fa-weibo"></i></a>
+                    <a href="https://www.bilibili.com/bangumi/play/ss73077?spm_id_from=333.337.0.0"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.bilibili.com/bangumi/play/ss43164?spm_id_from=333.337.0.0"><i class="fab fa-bilibili"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Girls Band Animation 版权所有</p>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+    <script src="../js/clock.js"></script>
+    <script src="music-player.js"></script>
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
+        });
+
+        function updateIcon(theme) {
+            icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+    </script>
+</body>
+</html> 
